@@ -30,3 +30,8 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+#忽略mac系统生成的文件夹和文件
+.DS_Store
+
+
