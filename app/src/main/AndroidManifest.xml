@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mmrx.yunliao" >
+    package="com.mmrx.yunliao"
+    android:sharedUserId="android.uid.system">
+    <!--短信的相关权限-->
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <application
         android:allowBackup="true"
@@ -18,6 +24,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--注册短信和彩信监听器-->
+        <receiver
+            android:name=".receiver.SmsReceiver"
+            android:permission="android.permission.BROADCAST_SMS"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_DELIVER"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.MmsReceiver"
+            android:permission="android.permission.BROADCAST_WAP_PUSH"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER"/>
+                <data android:mimeType="application/vnd.wap.mms-message"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
