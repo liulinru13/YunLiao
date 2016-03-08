@@ -2,4 +2,7 @@
     <string name="app_name">YunLiao</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_abs">AbsActivity</string>
+
+    <string name="bn_positive">确定</string>
+    <string name="bn_negative">取消</string>
 </resources>

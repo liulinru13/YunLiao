@@ -1,6 +1,9 @@
 package com.mmrx.yunliao;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +12,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AbsActivity {
+import com.mmrx.yunliao.presenter.util.CustomDialog;
+import com.mmrx.yunliao.presenter.util.L;
+import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 
+public class MainActivity extends AbsActivity {
+    private final String TAG = "mainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,10 +34,30 @@ public class MainActivity extends AbsActivity {
             }
         });
     }
-
+    @TargetApi(19)
     @Override
     public void init() {
+        MiddlewareProxy middlewareProxy = MiddlewareProxy.getInstance();
 
+        middlewareProxy.createDialog(getFragmentManager(), "dialog", "", "123", new CustomDialog.CustomDialogListener() {
+            @Override
+            public void doNegativeClick() {
+
+            }
+
+            @Override
+            public void doPositiveClick() {
+                final String myPackageName = getPackageName();
+                final String smsPackageName = Telephony.Sms.getDefaultSmsPackage(MainActivity.this);
+                L.i(TAG,"package name is "+myPackageName);
+                if (!smsPackageName.equals(myPackageName)) {
+                    Intent intent =
+                            new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                    intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                            myPackageName);
+                    startActivity(intent);
+                }
+            }});
     }
 
     @Override
