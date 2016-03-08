@@ -5,6 +5,9 @@ package com.mmrx.yunliao.presenter.util;/**
 import android.app.FragmentManager;
 import android.view.View;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 创建人: mmrx
  * 时间: 16/3/7上午10:12
@@ -14,9 +17,10 @@ public class MiddlewareProxy {
     private static MiddlewareProxy mInstance;
 
     private CustomDialog mDialogFactory;//对话框工厂
-
+    private SimpleDateFormat mSimpleDateFormat;//格式 "yyyy-MM-dd hh:mm:ss"
     private MiddlewareProxy(){
         mDialogFactory = new CustomDialog();
+        mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 
     public static MiddlewareProxy getInstance(){
@@ -85,5 +89,14 @@ public class MiddlewareProxy {
                              CustomDialog.CustomDialogListener listener,
                              boolean posiShow,boolean negaShwo){
         mDialogFactory.newInstance(title,message,contentView,listener,posiShow,negaShwo).show(manager,tag);
+    }
+
+    /**
+     * @param date long型的日期
+     * @return yyyy-MM-dd hh:mm:ss 格式的日期
+     * */
+    public String dateFormat(long date){
+        Date temp = new Date(date);
+        return mSimpleDateFormat==null? null : mSimpleDateFormat.format(temp);
     }
 }
