@@ -5,6 +5,8 @@ package com.mmrx.yunliao.presenter.util;/**
 import android.app.FragmentManager;
 import android.view.View;
 
+import com.mmrx.yunliao.model.SmsDBhelper;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,9 +19,11 @@ public class MiddlewareProxy {
     private static MiddlewareProxy mInstance;
 
     private CustomDialog mDialogFactory;//对话框工厂
+    private SmsDBhelper mSmsDBhelper;//sms数据库操作类
     private SimpleDateFormat mSimpleDateFormat;//格式 "yyyy-MM-dd hh:mm:ss"
     private MiddlewareProxy(){
         mDialogFactory = new CustomDialog();
+        mSmsDBhelper = SmsDBhelper.getInstance();
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mmrx.yunliao.model.SmsDBhelper;
 import com.mmrx.yunliao.presenter.util.CustomDialog;
 import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
@@ -42,7 +43,10 @@ public class MainActivity extends AbsActivity {
         middlewareProxy.createDialog(getFragmentManager(), "dialog", "", "123", new CustomDialog.CustomDialogListener() {
             @Override
             public void doNegativeClick() {
+                SmsDBhelper.getInstance().deleteSmsThreadById(MainActivity.this.getApplication(),
+                        SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication()).get(0));
 
+                SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication());
             }
 
             @Override

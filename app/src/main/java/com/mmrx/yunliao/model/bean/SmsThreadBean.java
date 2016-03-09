@@ -28,8 +28,19 @@ public class SmsThreadBean {
         FAILED = 5;
         QUEUED = 6;  */
     private int     type;
-
     public SmsThreadBean() {
+    }
+
+    public SmsThreadBean(int _id, long date_long,int message_count,
+                         String recipient_ids, String snippet,
+                         int read, int type) {
+        this._id = _id;
+        setDate_long(date_long);
+        this.message_count = message_count;
+        this.recipient_ids = recipient_ids;
+        this.snippet = snippet;
+        setRead(read);
+        this.type = type;
     }
 
     public int get_id() {
@@ -107,5 +118,20 @@ public class SmsThreadBean {
 
     public void setAddresses(String addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public String toString() {
+        return "SmsThreadBean{" +
+                "_id=" + _id +
+                ", date_long=" + date_long +
+                ", date_str='" + date_str + '\'' +
+                ", message_count=" + message_count +
+                ", recipient_ids='" + recipient_ids + '\'' +
+                ", addresses='" + addresses + '\'' +
+                ", snippet='" + snippet + '\'' +
+                ", read=" + read +
+                ", type=" + type +
+                '}';
     }
 }
