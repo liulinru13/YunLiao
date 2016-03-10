@@ -5,6 +5,8 @@ package com.mmrx.yunliao;/**
 import android.app.Application;
 import android.content.res.Configuration;
 
+import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+
 /**
  * 创建人: mmrx
  * 时间: 16/3/8下午2:37
@@ -24,6 +26,7 @@ public class YunLiaoAppliaction extends Application{
     @Override
     public void onTerminate() {
         super.onTerminate();
+//        MiddlewareProxy.getInstance()
     }
 
     @Override

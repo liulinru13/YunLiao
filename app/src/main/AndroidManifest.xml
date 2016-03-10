@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".view.impl.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -38,14 +38,14 @@
         </activity>
         <!-- 注册短信和彩信广播监听器以及短信后台服务 android4.4及其以上版本 需要-->
         <receiver
-            android:name=".emptySmsClass.EmptySmsReceiver"
+            android:name=".SmsReceiver.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".emptySmsClass.EmptyMmsReceiver"
+            android:name=".SmsReceiver.EmptyMmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
@@ -53,7 +53,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".emptySmsClass.EmptySmsSendService"
+            android:name=".SmsReceiver.SmsSendService"
             android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
             android:exported="true" >
             <intent-filter>

@@ -1,4 +1,4 @@
-package com.mmrx.yunliao.model.bean;/**
+package com.mmrx.yunliao.model.bean.sms;/**
  * Created by mmrx on 16/3/8.
  */
 
@@ -15,7 +15,7 @@ public class SmsBean {
     private int     _id;//短信序号
     private int     thread_id;//对话的序号,与同一手机号互发短信,其序号是相同的
     private String   address;//发件人地址,即手机号
-    private int     person;//发件人,通讯录中的,陌生人则为null
+    private int     person;//发件人,通讯录中的id,陌生人则为null
     private long     date_long;//日期,long型
     private String   date_str;//日期,带格式的
     private long     date_sent_long;//发送日期,long型

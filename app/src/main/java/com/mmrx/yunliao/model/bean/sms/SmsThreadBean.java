@@ -1,4 +1,4 @@
-package com.mmrx.yunliao.model.bean;/**
+package com.mmrx.yunliao.model.bean.sms;/**
  * Created by mmrx on 16/3/8.
  */
 

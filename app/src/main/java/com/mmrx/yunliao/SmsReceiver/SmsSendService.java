@@ -1,11 +1,11 @@
-package com.mmrx.yunliao.emptySmsClass;
+package com.mmrx.yunliao.SmsReceiver;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-public class EmptySmsSendService extends Service {
-    public EmptySmsSendService() {
+public class SmsSendService extends Service {
+    public SmsSendService() {
     }
 
     @Override

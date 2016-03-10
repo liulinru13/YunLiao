@@ -1,15 +1,29 @@
 package com.mmrx.yunliao.model;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.Telephony;
+import android.telephony.SmsManager;
 
-import com.mmrx.yunliao.model.bean.SmsBean;
-import com.mmrx.yunliao.model.bean.SmsThreadBean;
+import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.model.bean.sms.SmsBean;
+import com.mmrx.yunliao.model.bean.sms.SmsThread;
+import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
+import com.mmrx.yunliao.presenter.IClean;
 import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MyToast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +31,19 @@ import java.util.List;
  * Created by mmrx on 16/3/8.
  * 操作sms数据库的辅助类
  */
-public class SmsDBhelper {
-    private static final String TAG = "SmsDBhelperLog";
+public class SmsDBhelper implements IClean{
+    private final String TAG = "SmsDBhelperLog";
     private static SmsDBhelper ourInstance = new SmsDBhelper();
-
+    private YlDBhelper mYlDbHelper;
     public static SmsDBhelper getInstance() {
         return ourInstance;
     }
 
     private SmsDBhelper() {
+    }
+
+    public void initDB(Context context){
+        this.mYlDbHelper = new YlDBhelper(context);
     }
 
     /**
@@ -134,5 +152,103 @@ public class SmsDBhelper {
         }
         return true;
     }
+
+    /***
+     * 将短信写入数据库中
+     * @param context
+     * @param date 时间 long
+     * @param read 是否阅读
+     * @param type
+     * @param address 短信发送者地址
+     * @param body 内容
+     *
+     */
+    public void writeSmsToDB(Context context,long date,int read
+            ,int type,String address,String body){
+        ContentValues values = new ContentValues();
+        values.put("date",date);
+        values.put("address",address);
+        values.put("body",body);
+        values.put("read",read);
+        values.put("type", type);
+        context.getContentResolver().insert(Uri.parse(getUriByType(type)),values);
+    }
+
+    /***
+     * 根据type来获取sms存储的uri
+     * @param type
+     * @return
+     */
+    public final String getUriByType(final int type){
+        switch (type){
+            case 1:
+                return Contant.SMS_INBOX_URI;
+            case 2:
+                return Contant.SMS_SEND_URI;
+            case 3:
+                return Contant.SMS_DRAFT_URI;
+            case 4:
+                return Contant.SMS_OUTBOX_URI;
+            case 5:
+                return Contant.SMS_FAILED_URI;
+            case 6:
+                return Contant.SMS_QUEUED_URI;
+            case 0:
+            default:
+                return Contant.SMS_URI_ALL;
+        }
+    }
+    @Override
+    public void clear(){
+        if(this.mYlDbHelper != null && this.mYlDbHelper.mDb.isOpen()) {
+            this.mYlDbHelper.mDb.close();
+        }
+    }
+
+    class YlDBhelper{
+        final String DATABASE_PATH = "/data"
+                + Environment.getDataDirectory().getAbsolutePath()
+                + "/"
+                + Contant.PACKAGE_NAME;
+
+//        Context mContext;
+        SQLiteDatabase mDb;
+        public YlDBhelper(Context context){
+//            this.mContext = context;
+            this.mDb = initDB(context);
+        }
+        /**
+         * @param context
+         * 初始化应用数据库,如果不存在相应数据库,则将db文件导入
+         * */
+        SQLiteDatabase initDB(Context context){
+            try{
+                String dbFileName = DATABASE_PATH + "/" + Contant.DATABASE_NAME;
+                File dir = new File(DATABASE_PATH);
+                if(!dir.exists()){
+                    dir.mkdir();
+                }
+                if(!(new File(dbFileName)).exists()){
+                    InputStream is = context.getResources().openRawResource(R.raw.ylsmsdb);
+                    FileOutputStream fos = new FileOutputStream(dbFileName);
+                    byte[] buffer = new byte[8192];
+                    int count = 0;
+                    while((count = is.read(buffer)) > 0){
+                        fos.write(buffer,0,count);
+                    }
+                    fos.close();
+                    is.close();
+                }
+                return SQLiteDatabase.openOrCreateDatabase(dbFileName,null);
+
+            }catch (FileNotFoundException e){
+                e.printStackTrace();
+            }catch (IOException e1){
+                e1.printStackTrace();
+            }
+            return null;
+        }//
+
+    }//
 
 }

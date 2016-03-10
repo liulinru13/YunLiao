@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.view.View;
 
 import com.mmrx.yunliao.model.SmsDBhelper;
+import com.mmrx.yunliao.presenter.IClean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
  * 时间: 16/3/7上午10:12
  * 描述: 中间件,提供可复用的功能接口
  */
-public class MiddlewareProxy {
+public class MiddlewareProxy implements IClean{
     private static MiddlewareProxy mInstance;
 
     private CustomDialog mDialogFactory;//对话框工厂
@@ -102,5 +103,11 @@ public class MiddlewareProxy {
     public String dateFormat(long date){
         Date temp = new Date(date);
         return mSimpleDateFormat==null? null : mSimpleDateFormat.format(temp);
+    }
+
+
+    @Override
+    public void clear() {
+        mSmsDBhelper.clear();
     }
 }

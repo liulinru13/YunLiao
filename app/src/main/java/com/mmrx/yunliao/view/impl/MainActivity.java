@@ -1,4 +1,4 @@
-package com.mmrx.yunliao;
+package com.mmrx.yunliao.view.impl;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -6,16 +6,17 @@ import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.SmsDBhelper;
 import com.mmrx.yunliao.presenter.util.CustomDialog;
 import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+import com.mmrx.yunliao.view.AbsActivity;
 
 public class MainActivity extends AbsActivity {
     private final String TAG = "mainActivity";
@@ -43,10 +44,10 @@ public class MainActivity extends AbsActivity {
         middlewareProxy.createDialog(getFragmentManager(), "dialog", "", "123", new CustomDialog.CustomDialogListener() {
             @Override
             public void doNegativeClick() {
-                SmsDBhelper.getInstance().deleteSmsThreadById(MainActivity.this.getApplication(),
-                        SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication()).get(0));
-
-                SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication());
+//                SmsDBhelper.getInstance().deleteSmsThreadById(MainActivity.this.getApplication(),
+//                        SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication()).get(0));
+//
+//                SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication());
             }
 
             @Override
@@ -61,6 +62,7 @@ public class MainActivity extends AbsActivity {
                             myPackageName);
                     startActivity(intent);
                 }
+                SmsDBhelper.getInstance().initDB(getApplication());
             }});
     }
 

@@ -1,11 +1,11 @@
-package com.mmrx.yunliao.emptySmsClass;
+package com.mmrx.yunliao.SmsReceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class EmptyMmsReceiver extends BroadcastReceiver {
-    public EmptyMmsReceiver() {
+public class SmsReceiver extends BroadcastReceiver {
+    public SmsReceiver() {
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.mmrx.yunliao;
+package com.mmrx.yunliao.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
