@@ -13,5 +13,54 @@ public class SmsCroupUserBean {
     private String   address;//地址
     private int     person;//发件人,通讯录中的id,陌生人则为null
     private int     group_id;//所属会话id
-    private int     status;//状态,已发送-1,发送失败0
+    private int     status;//状态,已发送-1,发送失败0,待发送1
+
+    public SmsCroupUserBean(int _id, String address, int person,
+                            int group_id, int status) {
+        this._id = _id;
+        this.address = address;
+        this.person = person;
+        this.group_id = group_id;
+        this.status = status;
+    }
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getPerson() {
+        return person;
+    }
+
+    public void setPerson(int person) {
+        this.person = person;
+    }
+
+    public int getGroup_id() {
+        return group_id;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

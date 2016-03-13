@@ -33,4 +33,10 @@ public class Contant {
 
     /*********文件相关********/
     public static final String DATABASE_NAME = "ylsmsdb.db";
+    public static final String DATABASE_YL_GROUP_THREADS_TABLE = "sms_group_threads_table";
+    public static final String DATABASE_YL_GROUP_TABLE = "sms_group_table";
+    public static final String DATABASE_YL_GROUP_USER_TABLE = "sms_group_user_table";
+
+    /*********异常相关********/
+    public static final String EXCEPTION_YLDB_IS_NULL = "云聊群发记录数据库实例为null";
 }
