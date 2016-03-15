@@ -18,7 +18,13 @@ public class SmsGroupBean {
     private int     status;//状态 已发送-1,草稿0,正在发送1,发送失败2
     private int     thread_id;//会话id
 
+    public SmsGroupBean(){
 
+    }
+    public SmsGroupBean(long date_long, String body) {
+        this.date_long = date_long;
+        this.body = body;
+    }
 
     public int get_id() {
         return _id;

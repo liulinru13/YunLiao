@@ -3,6 +3,7 @@ package com.mmrx.yunliao.presenter.util;/**
  */
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.view.View;
 
 import com.mmrx.yunliao.model.SmsDBhelper;
@@ -33,6 +34,17 @@ public class MiddlewareProxy implements IClean{
             mInstance = new MiddlewareProxy();
         }
         return mInstance;
+    }
+
+    /**
+     * 该方法在应用开始时被调用,初始化需要Context对象的资源
+     * @param context
+     */
+    public void init(Context context){
+        if(context == null)
+            return;
+
+        mSmsDBhelper.initDB(context);
     }
     /**
      * 显示对话框
@@ -100,9 +112,15 @@ public class MiddlewareProxy implements IClean{
      * @param date long型的日期
      * @return yyyy-MM-dd hh:mm:ss 格式的日期
      * */
-    public String dateFormat(long date){
+    public String dateFormat(Long date){
+        if(date == null)
+            return null;
         Date temp = new Date(date);
         return mSimpleDateFormat==null? null : mSimpleDateFormat.format(temp);
+    }
+
+    public long getCurrentSystemTimeInLong(){
+        return System.currentTimeMillis();
     }
 
 

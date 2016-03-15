@@ -24,6 +24,11 @@ public class SmsCroupUserBean {
         this.status = status;
     }
 
+    public SmsCroupUserBean(String address, int person) {
+        this.address = address;
+        this.person = person;
+    }
+
     public int get_id() {
         return _id;
     }

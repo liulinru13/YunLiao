@@ -13,10 +13,15 @@ import android.view.MenuItem;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.SmsDBhelper;
+import com.mmrx.yunliao.model.bean.group.SmsCroupUserBean;
+import com.mmrx.yunliao.model.bean.group.SmsGroupBean;
+import com.mmrx.yunliao.model.bean.group.SmsGroupThreadSend;
 import com.mmrx.yunliao.presenter.util.CustomDialog;
 import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.view.AbsActivity;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AbsActivity {
     private final String TAG = "mainActivity";
@@ -40,21 +45,15 @@ public class MainActivity extends AbsActivity {
     @Override
     public void init() {
         MiddlewareProxy middlewareProxy = MiddlewareProxy.getInstance();
-
+        middlewareProxy.init(getApplication());
         middlewareProxy.createDialog(getFragmentManager(), "dialog", "", "123", new CustomDialog.CustomDialogListener() {
             @Override
             public void doNegativeClick() {
-//                SmsDBhelper.getInstance().deleteSmsThreadById(MainActivity.this.getApplication(),
-//                        SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication()).get(0));
 //
-//                SmsDBhelper.getInstance().readAllSmsThreads(MainActivity.this.getApplication());
-            }
 
-            @Override
-            public void doPositiveClick() {
                 final String myPackageName = getPackageName();
                 final String smsPackageName = Telephony.Sms.getDefaultSmsPackage(MainActivity.this);
-                L.i(TAG,"package name is "+myPackageName);
+                L.i(TAG, "package name is " + myPackageName);
                 if (!smsPackageName.equals(myPackageName)) {
                     Intent intent =
                             new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
@@ -62,8 +61,26 @@ public class MainActivity extends AbsActivity {
                             myPackageName);
                     startActivity(intent);
                 }
-                SmsDBhelper.getInstance().initDB(getApplication());
-            }});
+
+            }
+
+            @Override
+            public void doPositiveClick() {
+                SmsGroupThreadSend send = new SmsGroupThreadSend();
+                send.setmGroupBean(new SmsGroupBean(1l, "insertt"));
+                ArrayList<SmsCroupUserBean> list = new ArrayList<SmsCroupUserBean>();
+                for (int i = 0; i < 3; i++) {
+                    list.add(new SmsCroupUserBean("123 " + i, 666));
+                }
+                send.setmGroupUsersList(list);
+                try {
+                    SmsDBhelper.getInstance().insertNewGroupSms(send);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     @Override
