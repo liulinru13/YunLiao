@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mmrx.yunliao" >
 
     <!-- 短信的相关权限 -->
@@ -19,15 +20,21 @@
             android:name=".view.impl.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
+        <activity
+            android:name=".view.impl.YunLiaoMainActivity"
+            android:label="@string/title_activity_yun_liao_main"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
-
+                <!--
                 <category android:name="android.intent.category.DEFAULT" />
+                -->
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="sms" />
@@ -36,7 +43,8 @@
                 <data android:scheme="mmsto" />
             </intent-filter>
         </activity>
-        <!-- 注册短信和彩信广播监听器以及短信后台服务 android4.4及其以上版本 需要-->
+
+        <!-- 注册短信和彩信广播监听器以及短信后台服务 android4.4及其以上版本 需要 -->
         <receiver
             android:name=".SmsReceiver.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS" >
@@ -49,16 +57,20 @@
             android:permission="android.permission.BROADCAST_WAP_PUSH" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
+
                 <data android:mimeType="application/vnd.wap.mms-message" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".SmsReceiver.SmsSendService"
-            android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
-            android:exported="true" >
+            android:exported="true"
+            android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE" >
             <intent-filter>
                 <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="sms" />
                 <data android:scheme="smsto" />
                 <data android:scheme="mms" />

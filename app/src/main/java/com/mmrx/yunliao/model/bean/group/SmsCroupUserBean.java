@@ -13,7 +13,7 @@ public class SmsCroupUserBean {
     private String   address;//地址
     private int     person;//发件人,通讯录中的id,陌生人则为null
     private int     group_id;//所属会话id
-    private int     status;//状态,已发送-1,发送失败0,待发送1
+    private int     status;//状态 已发送-1,草稿0,正在发送1,发送失败2
 
     public SmsCroupUserBean(int _id, String address, int person,
                             int group_id, int status) {

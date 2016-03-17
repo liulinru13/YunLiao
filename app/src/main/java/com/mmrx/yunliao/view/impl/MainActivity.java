@@ -66,18 +66,18 @@ public class MainActivity extends AbsActivity {
 
             @Override
             public void doPositiveClick() {
-                SmsGroupThreadSend send = new SmsGroupThreadSend();
-                send.setmGroupBean(new SmsGroupBean(1l, "insertt"));
-                ArrayList<SmsCroupUserBean> list = new ArrayList<SmsCroupUserBean>();
-                for (int i = 0; i < 3; i++) {
-                    list.add(new SmsCroupUserBean("123 " + i, 666));
-                }
-                send.setmGroupUsersList(list);
-                try {
-                    SmsDBhelper.getInstance().insertNewGroupSms(send);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                SmsGroupThreadSend send = new SmsGroupThreadSend();
+//                send.setmGroupBean(new SmsGroupBean(1l, "insertt"));
+//                ArrayList<SmsCroupUserBean> list = new ArrayList<SmsCroupUserBean>();
+//                for (int i = 0; i < 3; i++) {
+//                    list.add(new SmsCroupUserBean("123 " + i, 666));
+//                }
+//                send.setmGroupUsersList(list);
+//                try {
+//                    SmsDBhelper.getInstance().insertNewGroupSms(send);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 
             }
         });

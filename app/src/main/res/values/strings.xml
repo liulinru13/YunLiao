@@ -5,4 +5,8 @@
 
     <string name="bn_positive">确定</string>
     <string name="bn_negative">取消</string>
+    <string name="title_activity_yun_liao_main">YunLiaoMainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

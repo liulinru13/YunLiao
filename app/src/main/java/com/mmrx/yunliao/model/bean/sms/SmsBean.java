@@ -22,6 +22,7 @@ public class SmsBean {
     private String   date_sent_str;//发送日期,格式
     private boolean   read;//是否阅读,0未读,1已读,这里用boolean来表示
     private int     status;//短信状态,-1接收,0 complete,64 pending
+    private String   subject;//题目
     /*type
         ALL    = 0;
         INBOX  = 1;
@@ -32,7 +33,7 @@ public class SmsBean {
         QUEUED = 6;  */
     private int     type;
     private String   body;//短信内容
-
+    private int     locked;//是否上锁,默认为0
     public SmsBean() {
     }
 
@@ -136,5 +137,21 @@ public class SmsBean {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public int getLocked() {
+        return locked;
+    }
+
+    public void setLocked(int locked) {
+        this.locked = locked;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

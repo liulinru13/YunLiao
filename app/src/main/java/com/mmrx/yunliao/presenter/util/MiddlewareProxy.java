@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.view.View;
 
+import com.mmrx.yunliao.model.GroupSmsDBhelper;
 import com.mmrx.yunliao.model.SmsDBhelper;
 import com.mmrx.yunliao.presenter.IClean;
 
@@ -15,17 +16,21 @@ import java.util.Date;
 /**
  * 创建人: mmrx
  * 时间: 16/3/7上午10:12
- * 描述: 中间件,提供可复用的功能接口
+ * 描述: 中间件,提供可复用的功能接口以及数据库相关操作
  */
 public class MiddlewareProxy implements IClean{
     private static MiddlewareProxy mInstance;
 
     private CustomDialog mDialogFactory;//对话框工厂
     private SmsDBhelper mSmsDBhelper;//sms数据库操作类
+    private GroupSmsDBhelper mGroupSmsDBhelper;//群发sms数据库操作类
+
     private SimpleDateFormat mSimpleDateFormat;//格式 "yyyy-MM-dd hh:mm:ss"
     private MiddlewareProxy(){
         mDialogFactory = new CustomDialog();
         mSmsDBhelper = SmsDBhelper.getInstance();
+        mGroupSmsDBhelper = GroupSmsDBhelper.getInstance();
+
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 
@@ -43,8 +48,7 @@ public class MiddlewareProxy implements IClean{
     public void init(Context context){
         if(context == null)
             return;
-
-        mSmsDBhelper.initDB(context);
+        mGroupSmsDBhelper.initDB(context);
     }
     /**
      * 显示对话框
@@ -126,6 +130,6 @@ public class MiddlewareProxy implements IClean{
 
     @Override
     public void clear() {
-        mSmsDBhelper.clear();
+
     }
 }

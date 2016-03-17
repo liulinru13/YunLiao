@@ -15,8 +15,9 @@ public class SmsGroupBean {
     private long    date_long;//时间 long
     private String   date_str;//时间,带格式
     private String   body;//内容
-    private int     status;//状态 已发送-1,草稿0,正在发送1,发送失败2
+//    private int     status;//状态 已发送-1,草稿0,正在发送1,发送失败2
     private int     thread_id;//会话id
+    private int     locked;//是否上锁,默认为0,锁状态为1
 
     public SmsGroupBean(){
 
@@ -59,13 +60,13 @@ public class SmsGroupBean {
         this.body = body;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
+//    public int getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(int status) {
+//        this.status = status;
+//    }
 
     public int getThread_id() {
         return thread_id;
@@ -73,5 +74,13 @@ public class SmsGroupBean {
 
     public void setThread_id(int thread_id) {
         this.thread_id = thread_id;
+    }
+
+    public int getLocked() {
+        return locked;
+    }
+
+    public void setLocked(int locked) {
+        this.locked = locked;
     }
 }
