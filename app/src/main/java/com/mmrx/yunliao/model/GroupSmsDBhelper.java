@@ -31,7 +31,7 @@ public class GroupSmsDBhelper {
 
     public void initDB(Context context){
         if(this.mYlDbHelper == null) {
-            this.mYlDbHelper = new YlDBhelper(context,Contant.DATABASE_NAME, null, 1);
+            this.mYlDbHelper = new YlDBhelper(context,Constant.DATABASE_NAME, null, 1);
             getAllTableName();
         }
     }
@@ -48,14 +48,14 @@ public class GroupSmsDBhelper {
             db = this.mYlDbHelper.getWritableDatabase();
             db.beginTransaction();
             //创建一个新的threads记录
-            int threadId = getLastId(Contant.DATABASE_YL_GROUP_THREADS_TABLE) +1;
+            int threadId = getLastId(Constant.DATABASE_YL_GROUP_THREADS_TABLE) +1;
             db.execSQL("INSERT INTO sms_group_threads_table "
                     + "VALUES (" + threadId + ",0);");
             //插入会话信息,bean中仅有date和body信息
             SmsGroupBean groupBean = sendInfo.getmGroupBean();
             insertGroupBean(db,groupBean,threadId);
             //获取刚刚插入的记录的_id
-            int groupId = getLastId(Contant.DATABASE_YL_GROUP_TABLE);
+            int groupId = getLastId(Constant.DATABASE_YL_GROUP_TABLE);
             //插入用户记录
             for(SmsCroupUserBean userBean : sendInfo.getmGroupUsersList()){
                 writeGroupUserInfo(userBean,groupId);
@@ -86,7 +86,7 @@ public class GroupSmsDBhelper {
             SmsGroupBean groupBean = sendInfo.getmGroupBean();
             insertGroupBean(db,groupBean,null);
             //获取刚刚插入的记录的_id
-            int groupId = getLastId(Contant.DATABASE_YL_GROUP_TABLE);
+            int groupId = getLastId(Constant.DATABASE_YL_GROUP_TABLE);
             //插入用户记录
             for(SmsCroupUserBean userBean : sendInfo.getmGroupUsersList()){
                 writeGroupUserInfo(userBean,groupId);
@@ -114,7 +114,7 @@ public class GroupSmsDBhelper {
             if(smsIsLocked(threadsBean))
                 return false;
             db = this.mYlDbHelper.getWritableDatabase();
-            result = db.delete(Contant.DATABASE_YL_GROUP_THREADS_TABLE,"_id = ?",new String[]{threadsBean.get_id()+""}) > 0;
+            result = db.delete(Constant.DATABASE_YL_GROUP_THREADS_TABLE,"_id = ?",new String[]{threadsBean.get_id()+""}) > 0;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -133,14 +133,14 @@ public class GroupSmsDBhelper {
             isDBnull();
             db = this.mYlDbHelper.getWritableDatabase();
             //删除失败
-            if(db.delete(Contant.DATABASE_YL_GROUP_TABLE,"_id = ? and locked = 0",new String[]{groupBean.get_id()+""}) == 0)
+            if(db.delete(Constant.DATABASE_YL_GROUP_TABLE,"_id = ? and locked = 0",new String[]{groupBean.get_id()+""}) == 0)
                 return result;
             //还需要判断下,删除该条记录后,该记录所属的thread是否为空了,如果为空,就需要把对应的thread也一并删除
-            Cursor cursor = db.rawQuery("SELECT count(*) FROM " + Contant.DATABASE_YL_GROUP_TABLE + " WHERE thread_id = ?"
+            Cursor cursor = db.rawQuery("SELECT count(*) FROM " + Constant.DATABASE_YL_GROUP_TABLE + " WHERE thread_id = ?"
                     , new String[]{groupBean.getThread_id() + ""});
             if(cursor != null && cursor.moveToFirst()){
                 if(cursor.getInt(0) == 0){
-                    db.delete(Contant.DATABASE_YL_GROUP_THREADS_TABLE,"_id = ?",new String[]{groupBean.getThread_id()+""});
+                    db.delete(Constant.DATABASE_YL_GROUP_THREADS_TABLE,"_id = ?",new String[]{groupBean.getThread_id()+""});
                 }
             }
             return true;
@@ -157,7 +157,7 @@ public class GroupSmsDBhelper {
      * @param status
      * @return 是否成功更新
      */
-    public boolean updateGroupSmsStatus(SmsCroupUserBean userBean,Contant.SMS_GROUP_SATTUS status){
+    public boolean updateGroupSmsStatus(SmsCroupUserBean userBean,Constant.SMS_GROUP_SATTUS status){
         SQLiteDatabase db = null;
         int row = 0;
         try{
@@ -165,7 +165,7 @@ public class GroupSmsDBhelper {
             db = this.mYlDbHelper.getWritableDatabase();
             ContentValues cv = new ContentValues();
             cv.put("status",status.getValues());
-            row = db.update(Contant.DATABASE_YL_GROUP_USER_TABLE, cv, "_id = ?", new String[]{userBean.get_id()+""});
+            row = db.update(Constant.DATABASE_YL_GROUP_USER_TABLE, cv, "_id = ?", new String[]{userBean.get_id()+""});
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -186,7 +186,7 @@ public class GroupSmsDBhelper {
             db = this.mYlDbHelper.getWritableDatabase();
             ContentValues cv = new ContentValues();
             cv.put("locked",isLocked?1:0);
-            row = db.update(Contant.DATABASE_YL_GROUP_TABLE, cv, "_id = ?", new String[]{groupBean.get_id()+""});
+            row = db.update(Constant.DATABASE_YL_GROUP_TABLE, cv, "_id = ?", new String[]{groupBean.get_id()+""});
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -204,7 +204,7 @@ public class GroupSmsDBhelper {
         try{
             isDBnull();
             db = this.mYlDbHelper.getReadableDatabase();
-            Cursor cursor = db.query(Contant.DATABASE_YL_GROUP_TABLE,
+            Cursor cursor = db.query(Constant.DATABASE_YL_GROUP_TABLE,
                         new String[]{"COUNT(*)"}, "locked = 1 and thread_id = ?",
                         new String[]{groupThreadsBean.get_id() + ""}, null, null, null);
             if(cursor != null && cursor.moveToFirst()){
@@ -301,7 +301,7 @@ public class GroupSmsDBhelper {
 //        final String DATABASE_PATH = "/data"
 //                + Environment.getDataDirectory().getAbsolutePath()
 //                + "/"
-//                + Contant.PACKAGE_NAME;
+//                + Constant.PACKAGE_NAME;
 //
 ////        Context mContext;
 //        SQLiteDatabase mDb;
@@ -315,7 +315,7 @@ public class GroupSmsDBhelper {
 //         * */
 //        SQLiteDatabase initDB(Context context){
 //            try{
-//                String dbFileName = DATABASE_PATH + "/" + Contant.DATABASE_NAME;
+//                String dbFileName = DATABASE_PATH + "/" + Constant.DATABASE_NAME;
 //                File dir = new File(DATABASE_PATH);
 //                if(!dir.exists()){
 //                    dir.mkdir();
@@ -392,7 +392,7 @@ public class GroupSmsDBhelper {
                     + "person integer,"
                     + "group_id integer NOT NULL,"
                     + "status integer DEFAULT "
-                    + Contant.SMS_GROUP_SATTUS.WRITTING.getValues() + ","//默认状态为草稿
+                    + Constant.SMS_GROUP_SATTUS.WRITTING.getValues() + ","//默认状态为草稿
                     + "FOREIGN KEY (group_id) REFERENCES sms_group_table (_id));");
 
             //Triggers structure for table sms_group_table

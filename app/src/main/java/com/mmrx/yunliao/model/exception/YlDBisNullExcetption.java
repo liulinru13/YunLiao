@@ -2,7 +2,7 @@ package com.mmrx.yunliao.model.exception;/**
  * Created by mmrx on 16/3/13.
  */
 
-import com.mmrx.yunliao.model.Contant;
+import com.mmrx.yunliao.model.Constant;
 
 /**
  * 创建人: mmrx
@@ -12,9 +12,9 @@ import com.mmrx.yunliao.model.Contant;
 public class YlDBisNullExcetption extends Exception {
 
     public YlDBisNullExcetption(String msg){
-        super(msg + " " + Contant.EXCEPTION_YLDB_IS_NULL);
+        super(msg + " " + Constant.EXCEPTION_YLDB_IS_NULL);
     }
     public YlDBisNullExcetption(){
-        super(Contant.EXCEPTION_YLDB_IS_NULL);
+        super(Constant.EXCEPTION_YLDB_IS_NULL);
     }
 }

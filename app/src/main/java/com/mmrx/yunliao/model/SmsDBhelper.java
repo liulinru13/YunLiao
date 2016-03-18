@@ -36,7 +36,7 @@ public class SmsDBhelper{
     public List<SmsThreadBean> queryAllSmsThreads(Context context){
         List<SmsThreadBean> list = null;
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(Uri.parse(Contant.SMS_THREADS_URI),
+        Cursor cursor = resolver.query(Uri.parse(Constant.SMS_THREADS_URI),
                 new String[]{"_id","date","message_count","recipient_ids","snippet","read","type"},
                 "type=0",null,null);
 
@@ -78,7 +78,7 @@ public class SmsDBhelper{
         ContentResolver resolver = context.getContentResolver();
         //在该threadId下的所有短信记录均未被锁定的前提下才能删除
         if(resolver != null && !smsIsLocked(resolver,bean))
-            return context.getContentResolver().delete(Uri.parse(Contant.SMS_URI_ALL),
+            return context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL),
                     "thread_id=?", new String[]{bean.get_id()+""}) >0;
         return false;
     }
@@ -98,7 +98,7 @@ public class SmsDBhelper{
         if(resolver == null){
             resolver = context.getContentResolver();
         }
-        Cursor cursor = resolver.query(Uri.parse(Contant.SMS_ADDRESS_URI),
+        Cursor cursor = resolver.query(Uri.parse(Constant.SMS_ADDRESS_URI),
                 null, "_id=?", new String[]{id}, null);
         if(cursor != null && cursor.moveToFirst()){
             result = cursor.getString(cursor.getColumnIndex("address"));
@@ -117,7 +117,7 @@ public class SmsDBhelper{
 
         L.i(TAG, "deleteSMSById" + sms.get_id());
         if(sms.getLocked() == 0)
-            return context.getContentResolver().delete(Uri.parse(Contant.SMS_URI_ALL),
+            return context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL),
                 "_id=?", new String[]{sms.get_id()+""}) > 0;
         return false;
 //        MyToast.showLong(context, "删除失败" + sms.get_id() + "\n");
@@ -233,20 +233,20 @@ public class SmsDBhelper{
     private final String getUriByType(final int type){
         switch (type){
             case 1:
-                return Contant.SMS_INBOX_URI;
+                return Constant.SMS_INBOX_URI;
             case 2:
-                return Contant.SMS_SEND_URI;
+                return Constant.SMS_SEND_URI;
             case 3:
-                return Contant.SMS_DRAFT_URI;
+                return Constant.SMS_DRAFT_URI;
             case 4:
-                return Contant.SMS_OUTBOX_URI;
+                return Constant.SMS_OUTBOX_URI;
             case 5:
-                return Contant.SMS_FAILED_URI;
+                return Constant.SMS_FAILED_URI;
             case 6:
-                return Contant.SMS_QUEUED_URI;
+                return Constant.SMS_QUEUED_URI;
             case 0:
             default:
-                return Contant.SMS_URI_ALL;
+                return Constant.SMS_URI_ALL;
         }
     }
 
