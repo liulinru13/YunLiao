@@ -13,4 +13,11 @@
     tools:showIn="@layout/app_bar_yun_liao_main"
     tools:context="com.mmrx.yunliao.view.impl.YunLiaoMainActivity">
 
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"
+        android:textSize="30dp"/>
+
 </RelativeLayout>

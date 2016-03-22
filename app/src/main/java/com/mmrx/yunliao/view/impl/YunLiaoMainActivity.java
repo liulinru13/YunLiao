@@ -11,9 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.view.AbsActivity;
+
+import com.daimajia.androidanimations.library.*;
 
 
 public class YunLiaoMainActivity extends AbsActivity
@@ -43,6 +46,19 @@ public class YunLiaoMainActivity extends AbsActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView tv = (TextView)findViewById(R.id.test);
+        tv.setText("HELLO");
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YoYo.with(Techniques.Shake)
+                        .duration(700)
+                        .playOn(v);
+            }
+        });
+
     }
 
     @Override
