@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.jenzz.materialpreference.Preference
+        android:title="新消息通知"
+        android:summary="消息提示方式设置"/>
+
+    <com.jenzz.materialpreference.SwitchPreference
+        android:title="切换应用主题"
+        android:summary="当前主题为 白天"
+        android:defaultValue="false"
+        android:key="pref_theme"/>
+
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="数据加密">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="数据是否加密"
+            android:summary="是否加密短信数据"
+            android:defaultValue="false"
+            android:key="pref_encode"/>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="数据加密显示"
+            android:summary="是否以加密形式显示短信数据"
+            android:defaultValue="false"
+            android:key="pref_encode_show" />
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.SwitchPreference
+        android:title="信息锁开关"
+        android:summary="防止批量操作短信数据时误删重要短信记录"
+        android:defaultValue="false"
+        android:key="pref_encode"/>
+
+    <com.jenzz.materialpreference.Preference
+        android:title="隐私"
+        android:summary="用户隐私数据管理" />
+    <com.jenzz.materialpreference.Preference
+        android:title="远程控制"
+        android:summary="远程控制设置" />
+</PreferenceScreen>

@@ -7,6 +7,18 @@
     <string name="bn_negative">取消</string>
     <string name="title_activity_yun_liao_main">YunLiaoMainActivity</string>
 
+    <!--侧边栏-->
+    <string name="drawer_backup">备份</string>
+    <string name="drawer_setting">设置</string>
+    <string name="drawer_about">关于</string>
+    <string name="drawer_app">关于应用</string>
+    <string name="drawer_author">关于作者</string>
+
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
