@@ -14,7 +14,6 @@ import com.mmrx.yunliao.R;
  */
 public class SmsListFragment extends Fragment {
 
-
     public SmsListFragment() {
         // Required empty public constructor
     }

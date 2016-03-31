@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.view.AbsActivity;
 
@@ -25,6 +27,8 @@ import com.mmrx.yunliao.view.fragment.SmsListFragment;
 
 import java.util.Stack;
 
+import butterknife.Bind;
+
 
 public class YunLiaoMainActivity extends AbsActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
@@ -33,7 +37,6 @@ public class YunLiaoMainActivity extends AbsActivity
     private final String LIST = "FRAGMENT_LIST";
     private final String EDIT = "FRAGMENT_EDIT";
     private final String SETTING = "FRAGMENT_SETTING";
-
 //    private String mPreFragment;
     private Stack<String> mFragmentStack;
     private SmsListFragment mListFragment;
@@ -52,18 +55,15 @@ public class YunLiaoMainActivity extends AbsActivity
 
         mFloatBn = (FloatingActionButton) findViewById(R.id.fab);
         mFloatBn.setOnClickListener(this);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //显示短信列表页面
         setFragmentSelection(LIST);
-
     }
 
     @Override
@@ -95,7 +95,9 @@ public class YunLiaoMainActivity extends AbsActivity
      */
     private void setFragmentSelection(final String selection){
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        mFragmentStack.push(selection);
+        //防止重复入栈
+        if(!mFragmentStack.peek().equals(selection))
+            mFragmentStack.push(selection);
         hideAllFragment(transaction);
         switch (selection){
             case LIST:
