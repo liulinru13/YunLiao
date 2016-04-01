@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.view.IFragmentListener;
 
 /**
  * 显示短信内容的fragment
  */
-public class SmsEditFragment extends Fragment {
+public class SmsEditFragment extends Fragment
+    implements IFragment{
 
+    private IFragmentListener mListener;
 
     public SmsEditFragment() {
         // Required empty public constructor
@@ -25,6 +28,11 @@ public class SmsEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sms_edit, container, false);
+    }
+
+    @Override
+    public void setFragmentListener(IFragmentListener listener) {
+        this.mListener = listener;
     }
 
 

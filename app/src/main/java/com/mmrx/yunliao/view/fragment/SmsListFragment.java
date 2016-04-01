@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.view.IFragmentListener;
 
 /**
  * 显示短信列表的fragment
  */
-public class SmsListFragment extends Fragment {
+public class SmsListFragment extends Fragment
+    implements IFragment{
 
+    private IFragmentListener mListener;
     public SmsListFragment() {
         // Required empty public constructor
     }
@@ -26,5 +29,8 @@ public class SmsListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_sms_list, container, false);
     }
 
-
+    @Override
+    public void setFragmentListener(IFragmentListener listener) {
+        this.mListener = listener;
+    }
 }

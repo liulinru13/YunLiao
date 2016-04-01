@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="隐私设置">
+
+        <com.jenzz.materialpreference.Preference
+            android:title="设置隐私密码"
+            android:summary="隐私密码用于确认远程控制命令\n如果首次设置密码,则输入两次相同密码,否则只有旧密码正确匹配后方可设置新密码"
+            android:key="pref_priv_code"/>
+
+        <com.afollestad.materialdialogs.prefs.MaterialDialogPreference
+            android:title="清空应用数据"
+            android:summary="将会清空应用所有数据,请慎重"
+            android:dialogMessage="是否清空应用信息?"
+            android:positiveButtonText="确定"
+            android:negativeButtonText="取消"
+            android:key="pref_priv_clear"/>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="控制命令短信显示"
+            android:summary="是否允许控制命令显示在短信列表"
+            android:defaultValue="true"
+            android:key="pref_priv_control_show"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+</PreferenceScreen>

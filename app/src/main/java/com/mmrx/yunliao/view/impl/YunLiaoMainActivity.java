@@ -18,9 +18,11 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.view.AbsActivity;
 
 import com.daimajia.androidanimations.library.*;
+import com.mmrx.yunliao.view.IFragmentListener;
 import com.mmrx.yunliao.view.fragment.SettingFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
@@ -31,12 +33,10 @@ import butterknife.Bind;
 
 
 public class YunLiaoMainActivity extends AbsActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        View.OnClickListener,
+        IFragmentListener{
 
-//    private final String NULL = "NULL";
-    private final String LIST = "FRAGMENT_LIST";
-    private final String EDIT = "FRAGMENT_EDIT";
-    private final String SETTING = "FRAGMENT_SETTING";
 //    private String mPreFragment;
     private Stack<String> mFragmentStack;
     private SmsListFragment mListFragment;
@@ -63,7 +63,7 @@ public class YunLiaoMainActivity extends AbsActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //显示短信列表页面
-        setFragmentSelection(LIST);
+        setFragmentSelection(Constant.LIST,null);
     }
 
     @Override
@@ -81,8 +81,8 @@ public class YunLiaoMainActivity extends AbsActivity
         switch (id){
             case R.id.fab:
 //                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                setFragmentSelection(EDIT);
+//                        .setAction("Action", null).show();null
+                setFragmentSelection(Constant.EDIT,null);
                 break;
             default:
                 break;
@@ -92,38 +92,51 @@ public class YunLiaoMainActivity extends AbsActivity
     /**
      * 根据参数选择显示的fragment
      * @param selection
+     * @param settingType 设置界面的的类型,当前一个参数非SETTING时,可以为null
      */
-    private void setFragmentSelection(final String selection){
+    private void setFragmentSelection(final String selection,String settingType){
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        //防止重复入栈
-        if(!mFragmentStack.peek().equals(selection))
+        //后退是使用两套策略
+        // 非子设置界面时(settingType == null),使用栈来存储,防止重复入栈
+        // 子设置界面时(settingType != null),使用FragmentTransaction自己的回退栈来解决.
+        if(settingType == null &&(mFragmentStack.isEmpty() || !mFragmentStack.peek().equals(selection)))
             mFragmentStack.push(selection);
         hideAllFragment(transaction);
         switch (selection){
-            case LIST:
+            case Constant.LIST:
                 if(mListFragment == null) {
                     mListFragment = new SmsListFragment();
-                    transaction.add(R.id.fragment_container, mListFragment, LIST);
+                    mListFragment.setFragmentListener(this);
+                    transaction.add(R.id.fragment_container, mListFragment, Constant.LIST);
                 }else{
                     transaction.show(mListFragment);
                 }
                 mFloatBn.setVisibility(View.VISIBLE);
                 break;
-            case EDIT:
+            case Constant.EDIT:
                 if(mEditFragment == null){
                     mEditFragment = new SmsEditFragment();
-                    transaction.add(R.id.fragment_container,mEditFragment,EDIT);
+                    mEditFragment.setFragmentListener(this);
+                    transaction.add(R.id.fragment_container,mEditFragment,Constant.EDIT);
                 }else{
                     transaction.show(mEditFragment);
                 }
                 mFloatBn.setVisibility(View.GONE);
                 break;
-            case SETTING:
-                if(mSettingFragment == null){
-                    mSettingFragment = new SettingFragment();
-                    transaction.add(R.id.fragment_container,mSettingFragment,SETTING);
-                }else{
-                    transaction.show(mSettingFragment);
+            case Constant.SETTING:
+                if(settingType == null){
+                    if(mSettingFragment == null){
+                        mSettingFragment = SettingFragment.newInstance(Constant.S_MAIN);
+                        mSettingFragment.setFragmentListener(this);
+                        transaction.add(R.id.fragment_container,mSettingFragment,Constant.SETTING);
+                    }else{
+                        transaction.show(mSettingFragment);
+                    }
+                }
+                //这里应该是从主要设置界面进入的
+                else{
+                    transaction.replace(R.id.fragment_container,SettingFragment.newInstance(settingType,this));
+                    transaction.addToBackStack(null);
                 }
                 mFloatBn.setVisibility(View.GONE);
                 break;
@@ -145,13 +158,34 @@ public class YunLiaoMainActivity extends AbsActivity
     }
     //当前栈顶的tag是当前页面的tag,之前页面的tag是第二次pop的内容
     private String getLastFragmentTag(){
-        if(mFragmentStack.isEmpty() || mFragmentStack.size() < 2) {
+        if((mFragmentStack.isEmpty() || mFragmentStack.size() < 2)) {
             return null;
         }
         mFragmentStack.pop();
         return mFragmentStack.pop();
     }
 
+    /**
+     * 判断三个主要的fragment是否都不显示
+     * 当返回值为true时,说明此时的回退策略应该是使用FragmentTransaction的回退栈
+     * 而不是自定义的stack
+     * @return
+     */
+    private boolean isAllFragmentHide(){
+        boolean isHide =
+                (mEditFragment == null || !mEditFragment.isVisible())
+                && (mListFragment == null || !mListFragment.isVisible())
+                && (mSettingFragment == null || !mSettingFragment.isVisible());
+        return isHide;
+    }
+
+    /**
+     * 回退判断策略
+     * 1.先判断侧边栏
+     * 2.判断FragmentManager的回退栈
+     * 3.判断自己维护的回退栈mFragmentStack
+     * 4.系统默认的返回操作
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -159,11 +193,21 @@ public class YunLiaoMainActivity extends AbsActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
             return;
-        } else {
+        }
+        //list,edit,主setting页面都隐藏,则说明
+        else if(isAllFragmentHide()){
+
+            mFragmentManager.popBackStack();
+            //回退后,所有的fragment会同时显示,需要仅显示mFragmentStack栈顶的页面
+            if(!mFragmentStack.isEmpty()){
+                setFragmentSelection(mFragmentStack.peek(),null);
+            }
+            return;
+        }else{
             //当前是编辑短信的显示状态,则需要回退到短信列表而不是退出应用
             String tag = null;
             if((tag = getLastFragmentTag())!= null){
-                setFragmentSelection(tag);
+                setFragmentSelection(tag,null);
                 return;
             }
         }
@@ -203,7 +247,7 @@ public class YunLiaoMainActivity extends AbsActivity
         }
         //设置
         else if (id == R.id.nav_setting) {
-            setFragmentSelection(SETTING);
+            setFragmentSelection(Constant.SETTING,null);
         }
         //关于应用
         else if (id == R.id.nav_app) {
@@ -217,5 +261,10 @@ public class YunLiaoMainActivity extends AbsActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentChanged(String fragment, String fragmentType) {
+        setFragmentSelection(fragment,fragmentType);
     }
 }

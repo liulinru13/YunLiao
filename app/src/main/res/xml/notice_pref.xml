@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="新消息通知">
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="提示音"
+            android:summary="新消息提示音开关"
+            android:switchTextOn="提示音开"
+            android:switchTextOff="提示音关"
+            android:defaultValue="true"
+            android:key="pref_notice_voice"/>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="震动"
+            android:summary="新消息提示震动开关"
+            android:switchTextOn="震动开"
+            android:switchTextOff="震动关"
+            android:defaultValue="false"
+            android:key="pref_notice_vibr"/>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="新消息通知栏"
+            android:summary="是否允许新消息在通知栏上显示"
+            android:checked="true"
+            android:key="pref_notifi_switch"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+</PreferenceScreen>

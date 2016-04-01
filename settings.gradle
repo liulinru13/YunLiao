@@ -1,1 +1,2 @@
-include ':app', ':libs:animatelibrary',':libs:MaterialPreference'
+include ':app'
+//, ':libs:animatelibrary',':libs:MaterialPreference'

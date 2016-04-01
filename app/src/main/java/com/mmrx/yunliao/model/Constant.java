@@ -67,8 +67,39 @@ public class Constant {
     //key值
     public static final String SP_K_THEME = "sp_key_theme";//主题的key值
 
+    //设置页面的信息
+    public static final String SP_SETTING_MAIN_NOTICE = "pref_notice";
+    public static final String SP_SETTING_MAIN_THEME = "pref_theme";
+    public static final String SP_SETTING_MAIN_ENCODE_SWITCH = "pref_encode_switch";
+    public static final String SP_SETTING_MAIN_ENCODE_SHOW = "pref_encode_show";
+    public static final String SP_SETTING_MAIN_LOCK = "pref_lock";
+    public static final String SP_SETTING_MAIN_PRIVATE = "pref_private";
+    public static final String SP_SETTING_MAIN_CONTROL = "pref_control";
+
+    public static final String SP_SETTING_PRIV_CODE = "pref_priv_code";
+    public static final String SP_SETTING_PRIV_CLEAR = "pref_priv_clear";
+    public static final String SP_SETTING_PRIV_CONTROL_SHOW = "pref_priv_control_show";
+
+    public static final String SP_SETTING_NOTICE_VOICE = "pref_notice_voice";
+    public static final String SP_SETTING_NOTICE_VIBR = "pref_notice_vibr";
+    public static final String SP_SETTING_NOTICE_NOTIFI = "pref_notifi_switch";
+
+    public static final String SP_SETTING_CONTROL_SWITCH = "pref_contr_switch";
+    public static final String SP_SETTING_CONTROL_QK = "pref_contr_qk";
+    public static final String SP_SETTING_CONTROL_LOCA = "pref_contr_loca";
+    public static final String SP_SETTING_CONTROL_ENC = "pref_contr_enc";
+
     /*********异常相关********/
     public static final String EXCEPTION_YLDB_IS_NULL = "云聊群发记录数据库实例为null";
 
+    /*********设置页面相关********/
+    public static final String S_MAIN = "setting_main";//主设置界面
+//    public static final String S_CONTROL = "setting_control";//远程控制界面
+//    public static final String S_NOTICE = "setting_notice";//消息设置界面
+//    public static final String S_PRIVATE = "setting_private";//隐私设置界面
 
+    /*********Fragment类型相关********/
+    public static final String LIST = "FRAGMENT_LIST";
+    public static final String EDIT = "FRAGMENT_EDIT";
+    public static final String SETTING = "FRAGMENT_SETTING";
 }
