@@ -8,4 +8,5 @@ import com.mmrx.yunliao.view.IFragmentListener;
  */
 public interface IFragment {
     void setFragmentListener(IFragmentListener listener);
+    String getFragmentTag();
 }

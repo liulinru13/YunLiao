@@ -16,6 +16,7 @@ import com.mmrx.yunliao.view.IFragmentListener;
 public class SmsEditFragment extends Fragment
     implements IFragment{
 
+    private final String tag = "sms_edit_fragment";
     private IFragmentListener mListener;
 
     public SmsEditFragment() {
@@ -36,4 +37,8 @@ public class SmsEditFragment extends Fragment
     }
 
 
+    @Override
+    public String getFragmentTag() {
+        return tag;
+    }
 }

@@ -16,6 +16,7 @@ import com.mmrx.yunliao.view.IFragmentListener;
 public class SmsListFragment extends Fragment
     implements IFragment{
 
+    private final String tag = "sms_list_fragment";
     private IFragmentListener mListener;
     public SmsListFragment() {
         // Required empty public constructor
@@ -32,5 +33,10 @@ public class SmsListFragment extends Fragment
     @Override
     public void setFragmentListener(IFragmentListener listener) {
         this.mListener = listener;
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return tag;
     }
 }

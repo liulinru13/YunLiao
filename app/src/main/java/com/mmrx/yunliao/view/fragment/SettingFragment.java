@@ -61,11 +61,11 @@ public class SettingFragment extends PreferenceFragment
         return settingFragment;
     }
 
-    public static SettingFragment newInstance(String page,IFragmentListener listener){
-        SettingFragment temp = newInstance(page);
-        temp.setFragmentListener(listener);
-        return temp;
-    }
+//    public static SettingFragment newInstance(String page,IFragmentListener listener){
+//        SettingFragment temp = newInstance(page);
+//        temp.setFragmentListener(listener);
+//        return temp;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,5 +152,10 @@ public class SettingFragment extends PreferenceFragment
     @Override
     public void setFragmentListener(IFragmentListener listener) {
         this.mListener = listener;
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return null;
     }
 }
