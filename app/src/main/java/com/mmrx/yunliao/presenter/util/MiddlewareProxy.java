@@ -12,6 +12,9 @@ import com.mmrx.yunliao.presenter.IClean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 创建人: mmrx
@@ -25,12 +28,14 @@ public class MiddlewareProxy implements IClean{
     private SmsDBhelper mSmsDBhelper;//sms数据库操作类
     private GroupSmsDBhelper mGroupSmsDBhelper;//群发sms数据库操作类
 
+    private ExecutorService mCacheThreadPool;
+
     private SimpleDateFormat mSimpleDateFormat;//格式 "yyyy-MM-dd hh:mm:ss"
     private MiddlewareProxy(){
         mDialogFactory = new CustomDialog();
         mSmsDBhelper = SmsDBhelper.getInstance();
         mGroupSmsDBhelper = GroupSmsDBhelper.getInstance();
-
+        mCacheThreadPool = Executors.newCachedThreadPool();
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 
@@ -127,6 +132,9 @@ public class MiddlewareProxy implements IClean{
         return System.currentTimeMillis();
     }
 
+    public ExecutorService getCacheThreadPool() {
+        return mCacheThreadPool;
+    }
 
     @Override
     public void clear() {

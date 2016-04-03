@@ -2,6 +2,7 @@ package com.mmrx.yunliao.view.impl;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,25 +44,30 @@ public class YunLiaoMainActivity extends AbsActivity
     private SmsEditFragment mEditFragment;
     private FragmentPresenter mPresenter;
     private FloatingActionButton mFloatBn;
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yun_liao_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar= (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("信息");
+        setSupportActionBar(mToolbar);
 
         mFloatBn = (FloatingActionButton) findViewById(R.id.fab);
         mFloatBn.setOnClickListener(this);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //显示短信列表页面
-        mPresenter.putFragment(mListFragment,mEditFragment);
+        mPresenter.putFragment(mListFragment, mEditFragment);
         mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag());
+
     }
 
     @Override
@@ -136,12 +142,14 @@ public class YunLiaoMainActivity extends AbsActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
         //备份
         if (id == R.id.nav_back_up) {
 
         }
         //设置
         else if (id == R.id.nav_setting) {
+            mDrawer.closeDrawer(GravityCompat.START);
             Intent intent = new Intent(this,SettingActivity.class);
             startActivity(intent);
         }
@@ -154,8 +162,7 @@ public class YunLiaoMainActivity extends AbsActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -166,5 +173,10 @@ public class YunLiaoMainActivity extends AbsActivity
             mFloatBn.setVisibility(View.VISIBLE);
         else
             mFloatBn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void changeTitle(String title) {
+        mToolbar.setTitle(title);
     }
 }

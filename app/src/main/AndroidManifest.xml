@@ -10,15 +10,20 @@
 
     <application
         android:name=".YunLiaoAppliaction"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".view.impl.MainActivity"
+            android:name=".view.impl.LoadingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.impl.YunLiaoMainActivity"
@@ -26,10 +31,6 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
 <!--                 <category android:name="android.intent.category.DEFAULT" /> -->

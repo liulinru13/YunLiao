@@ -41,4 +41,9 @@ public class SmsEditFragment extends Fragment
     public String getFragmentTag() {
         return tag;
     }
+
+    @Override
+    public String getFragmentTitle() {
+        return "姓名";
+    }
 }

@@ -1,12 +1,7 @@
 package com.mmrx.yunliao.view.impl;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.Constant;
@@ -21,13 +16,17 @@ public class SettingActivity extends AbsActivity
     private SettingFragment mFmain,mFcontrol,mFprivate,mFnotice;
     private FragmentPresenter mPresenter;
 
+    private Toolbar mToolBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mPresenter.fragmentSelection_replace(Constant.S_MAIN,true);
+        mToolBar= (Toolbar) findViewById(R.id.toolbar);
+        mToolBar.setTitle("设置");
+        setSupportActionBar(mToolBar);
+        mPresenter.fragmentSelection_replace(Constant.S_MAIN, true);
+
     }
 
     @Override
@@ -49,6 +48,11 @@ public class SettingActivity extends AbsActivity
     @Override
     public void onFragmentChanged(String fragment, String fragmentType) {
         mPresenter.fragmentSelection_replace(fragmentType,false);
+    }
+
+    @Override
+    public void changeTitle(String title) {
+        mToolBar.setTitle(title);
     }
 
     @Override

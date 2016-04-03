@@ -11,6 +11,7 @@ import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.view.IFragmentListener;
 import com.mmrx.yunliao.view.fragment.IFragment;
+import com.mmrx.yunliao.view.fragment.IFragmentOnScreen;
 import com.mmrx.yunliao.view.fragment.SettingFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
@@ -24,7 +25,7 @@ import java.util.Stack;
  * 时间: 16/4/2下午2:06
  * 描述: 负责管理Fragment的切换
  */
-public class FragmentPresenter implements IFragmentListener{
+public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
     private FragmentManager mFmanager;
 
     private Stack<String> mFragmentStack;//回退栈
@@ -87,14 +88,13 @@ public class FragmentPresenter implements IFragmentListener{
         hideAllFragment(transaction);
         Fragment fragment = this.mFragmentMap.get(tag);
         if(!hasFragmentByTag(tag)){
-//            if(fragment instanceof IFragment)
-//                ((IFragment)fragment).setFragmentListener(this);
             transaction.add(mContainerId, fragment, tag);
         }else{
             transaction.show(fragment);
         }
-
         transaction.commit();
+        //通过show/hide来进行fragment的切换时,需要手动更新activity上的title
+        setTitle((IFragment) fragment);
         listener.onFragmentChanged(tag,null);
     }
     /**
@@ -112,6 +112,14 @@ public class FragmentPresenter implements IFragmentListener{
             transaction.addToBackStack(null);
         }
         transaction.commit();
+        //通过replace进行fragment切换时,涉及到fragment生命周期方法的调用,
+        //所以可以监听哪个fragment的onStart方法,判断是否在当前屏幕上进行显示
+        //不需要显式调用下面的这个来设置title
+//        setTitle((IFragment) fragment);
+    }
+
+    private void setTitle(IFragment fragment){
+        listener.changeTitle(fragment.getFragmentTitle());
     }
 
     /**
@@ -153,6 +161,16 @@ public class FragmentPresenter implements IFragmentListener{
     @Override
     public void onFragmentChanged(String fragment, String fragmentType) {
         this.listener.onFragmentChanged(fragment,fragmentType);
+    }
+
+    @Override
+    public void changeTitle(String title) {
+        listener.changeTitle(title);
+    }
+
+    @Override
+    public void onTheScreen(IFragment fragment) {
+        listener.changeTitle(fragment.getFragmentTitle());
     }
 
     public boolean back(){

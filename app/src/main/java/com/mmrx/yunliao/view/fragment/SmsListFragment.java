@@ -39,4 +39,9 @@ public class SmsListFragment extends Fragment
     public String getFragmentTag() {
         return tag;
     }
+
+    @Override
+    public String getFragmentTitle() {
+        return "信息";
+    }
 }

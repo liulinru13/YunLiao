@@ -27,7 +27,8 @@ public class SettingFragment extends PreferenceFragment
     private String tag;
     private static final String key = "page";
     private final String TAG = "SettingFragmentLog";
-    private IFragmentListener mListener;
+    private String mTitle;
+    private IFragmentOnScreen mListener;
     //主设置界面
     private Preference mMain_notice;
     private SwitchPreference mMain_theme;
@@ -57,6 +58,7 @@ public class SettingFragment extends PreferenceFragment
             bundle.putString(key, page);
         }
         SettingFragment settingFragment = new SettingFragment();
+        settingFragment.chooseFragmentTitleByTag(page);
         settingFragment.setArguments(bundle);
         return settingFragment;
     }
@@ -112,6 +114,12 @@ public class SettingFragment extends PreferenceFragment
             mControl_reset_enc.setOnPreferenceClickListener(this);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //告诉宿主,自己现在是在屏幕上显示
+        this.mListener.onTheScreen(this);
+    }
 
     @Override
     public boolean onPreferenceClick(android.preference.Preference preference) {
@@ -149,13 +157,36 @@ public class SettingFragment extends PreferenceFragment
         }
     }
 
+    private void chooseFragmentTitleByTag(final String tag){
+        switch (tag){
+            case Constant.SP_SETTING_MAIN_CONTROL:
+                mTitle = "远程控制设置";
+                break;
+            case Constant.SP_SETTING_MAIN_NOTICE:
+                mTitle = "消息通知设置";
+                break;
+            case Constant.SP_SETTING_MAIN_PRIVATE:
+                mTitle = "隐私设置";
+                break;
+            default:
+                mTitle = "设置";
+                break;
+        }
+    }
+
     @Override
     public void setFragmentListener(IFragmentListener listener) {
-        this.mListener = listener;
+        if(listener instanceof IFragmentOnScreen)
+            this.mListener = (IFragmentOnScreen)listener;
     }
 
     @Override
     public String getFragmentTag() {
         return null;
+    }
+
+    @Override
+    public String getFragmentTitle() {
+        return mTitle;
     }
 }
