@@ -8,13 +8,13 @@
         android:id="@+id/custom_dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="title"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/custom_dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="message"/>
+        android:text=""/>
 
     <include
         layout="@layout/component_custom_dialog_bn"/>

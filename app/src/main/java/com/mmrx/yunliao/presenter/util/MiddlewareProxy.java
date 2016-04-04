@@ -117,6 +117,10 @@ public class MiddlewareProxy implements IClean{
         mDialogFactory.newInstance(title,message,contentView,listener,posiShow,negaShwo).show(manager,tag);
     }
 
+    public CustomDialog getDialogFactory() {
+        return mDialogFactory;
+    }
+
     /**
      * @param date long型的日期
      * @return yyyy-MM-dd hh:mm:ss 格式的日期

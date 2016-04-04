@@ -16,7 +16,7 @@
             android:summary="默认命令为 qk_隐私密码\n不填写内容为默认命令"
             android:dependency="pref_contr_switch"
             android:positiveButtonText="确认"
-            android:dialogMessage="请输入新的命令格式"
+            android:dialogMessage="请输入新的命令格式来替换qk"
             android:key="pref_contr_qk"/>
 
         <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
@@ -24,7 +24,7 @@
             android:summary="默认命令为 loca_隐私密码_接受手机号\n不填写内容为默认命令"
             android:dependency="pref_contr_switch"
             android:positiveButtonText="确认"
-            android:dialogMessage="请输入新的命令格式"
+            android:dialogMessage="请输入新的命令格式来替换loca"
             android:key="pref_contr_loca"/>
 
         <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
@@ -32,7 +32,7 @@
             android:summary="默认命令为 enc_隐私密码\n不填写内容为默认命令"
             android:dependency="pref_contr_switch"
             android:positiveButtonText="确认"
-            android:dialogMessage="请输入新的命令格式"
+            android:dialogMessage="请输入新的命令格式来替换enc"
             android:key="pref_contr_enc"/>
 
     </com.jenzz.materialpreference.PreferenceCategory>

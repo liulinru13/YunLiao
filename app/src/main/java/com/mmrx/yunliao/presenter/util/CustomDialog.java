@@ -38,9 +38,9 @@ public class CustomDialog extends DialogFragment{
         Bundle b = new Bundle();
         b.putString("title", title);
         b.putString("message", message);
-        mLayoutId = R.layout.layout_custom_dialog;
+        dialog.mLayoutId = R.layout.layout_custom_dialog;
         dialog.setArguments(b);
-        mCustomListener = listener;
+        dialog.mCustomListener = listener;
         return dialog;
     }
     /**
@@ -57,11 +57,11 @@ public class CustomDialog extends DialogFragment{
         Bundle b = new Bundle();
         b.putString("title", title);
         b.putString("message", message);
-        mLayoutId = R.layout.layout_custom_dialog;
+        dialog.mLayoutId = R.layout.layout_custom_dialog;
         dialog.setArguments(b);
-        mCustomListener = listener;
-        mPosiBnShow = posiShow;
-        mNegaBnShow = negaShwo;
+        dialog.mCustomListener = listener;
+        dialog.mPosiBnShow = posiShow;
+        dialog.mNegaBnShow = negaShwo;
         return dialog;
     }
 
@@ -78,10 +78,10 @@ public class CustomDialog extends DialogFragment{
         Bundle b = new Bundle();
         b.putString("title", title);
         b.putString("message", message);
-        mLayoutId = R.layout.layout_custom_dialog_view;
-        mContentView = contentView;
+        dialog.mLayoutId = R.layout.layout_custom_dialog_view;
+        dialog.mContentView = contentView;
         dialog.setArguments(b);
-        mCustomListener = listener;
+        dialog.mCustomListener = listener;
         return dialog;
     }
 
@@ -102,12 +102,12 @@ public class CustomDialog extends DialogFragment{
         Bundle b = new Bundle();
         b.putString("title", title);
         b.putString("message", message);
-        mLayoutId = R.layout.layout_custom_dialog_view;
-        mContentView = contentView;
+        dialog.mLayoutId = R.layout.layout_custom_dialog_view;
+        dialog.mContentView = contentView;
         dialog.setArguments(b);
-        mCustomListener = listener;
-        mPosiBnShow = posiShow;
-        mNegaBnShow = negaShwo;
+        dialog.mCustomListener = listener;
+        dialog.mPosiBnShow = posiShow;
+        dialog.mNegaBnShow = negaShwo;
         return dialog;
     }
 

@@ -63,9 +63,11 @@ public class Constant {
     public static final Boolean SP_TYPE_BOOLEAN = true;
     //文件名
     public static final String SP_F_THEME = "sp_file_name_theme";//保存主题信息的sp文件名
-
+    public static final String SP_F_SETTING_CODE = "sp_file_name_setting_code";//保存密码的sp文件名称
     //key值
     public static final String SP_K_THEME = "sp_key_theme";//主题的key值
+    public static final String SP_K_SETTING_CODE = "sp_key_setting_code";//主题的key值
+
 
     //设置页面的信息
     public static final String SP_SETTING_MAIN_NOTICE = "pref_notice";
@@ -102,4 +104,9 @@ public class Constant {
     public static final String LIST = "FRAGMENT_LIST";
     public static final String EDIT = "FRAGMENT_EDIT";
     public static final String SETTING = "FRAGMENT_SETTING";
+
+    /*********远程控制命令********/
+    public static final String CONTROL_SMS_CLEAN_DATA = "qk_%s";
+    public static final String CONTROL_SMS_GET_LOCATION = "loca_%s_%s";
+    public static final String CONTROL_SMS_ENCODE_DATA = "enc_%s";
 }

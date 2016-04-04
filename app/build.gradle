@@ -41,4 +41,8 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
         transitive = true
     }
+    //可以左右拖动的listView
+    compile 'com.xyczero:customswipelistview:1.0.1@aar'
+    //让文本框中内容跳动起来的库
+    compile 'net.frakbot:jumpingbeans:1.3.0'
 }

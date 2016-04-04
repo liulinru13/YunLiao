@@ -1,13 +1,9 @@
 package com.mmrx.yunliao.view.impl;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,24 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
 import com.mmrx.yunliao.R;
-import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.presenter.FragmentPresenter;
 import com.mmrx.yunliao.view.AbsActivity;
-
-import com.daimajia.androidanimations.library.*;
 import com.mmrx.yunliao.view.IFragmentListener;
-import com.mmrx.yunliao.view.fragment.SettingFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
-
-import java.util.Stack;
-
-import butterknife.Bind;
 
 
 public class YunLiaoMainActivity extends AbsActivity
@@ -67,7 +52,6 @@ public class YunLiaoMainActivity extends AbsActivity
         //显示短信列表页面
         mPresenter.putFragment(mListFragment, mEditFragment);
         mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag());
-
     }
 
     @Override
@@ -93,7 +77,6 @@ public class YunLiaoMainActivity extends AbsActivity
                 break;
         }
     }
-
 
     /**
      * 回退判断策略
