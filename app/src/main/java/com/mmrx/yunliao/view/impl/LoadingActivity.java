@@ -24,9 +24,7 @@ public class LoadingActivity extends AbsActivity {
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == SET_DEFAULT_SMS_APP){
-                enter = true;
-            }else if(enter && msg.what == ENTER_APP){
+            if(msg.what == ENTER_APP){
                 Intent intent = new Intent(LoadingActivity.this,YunLiaoMainActivity.class);
                 startActivity(intent);
                 LoadingActivity.this.finish();
@@ -49,6 +47,7 @@ public class LoadingActivity extends AbsActivity {
 //        });
 
     }
+
     @TargetApi(19)
     @Override
     public void init() {
@@ -57,55 +56,12 @@ public class LoadingActivity extends AbsActivity {
             @Override
             public void run() {
                 middlewareProxy.init(LoadingActivity.this.getApplication());
-                if(Build.VERSION.SDK_INT >=19) {
-                    final String myPackageName = getPackageName();
-                    final String smsPackageName = Telephony.Sms.getDefaultSmsPackage(LoadingActivity.this);
-                    if (!smsPackageName.equals(myPackageName)) {
-                        middlewareProxy.createDialog(getFragmentManager(), "dialog", "提示"
-                                , "当前应用非系统默认短信应用,正常使用需设置为系统默认短信应用,是否设置为默认短信应用?"
-                                , new CustomDialog.CustomDialogListener() {
-
-                            @Override
-                            public void doNegativeClick() {
-
-                                L.i(TAG, "package name is " + myPackageName);
-                                if (!smsPackageName.equals(myPackageName)) {
-                                    Intent intent =
-                                            new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                                    intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
-                                            myPackageName);
-                                    startActivity(intent);
-                                }
-
-                            }
-
-                            @Override
-                            public void doPositiveClick() {
-                                Intent intent =
-                                        new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                                intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
-                                        myPackageName);
-                                startActivity(intent);
-                                Message msg = new Message();
-                                msg.what = SET_DEFAULT_SMS_APP;
-                                mHandler.sendMessage(msg);
-                            }
-                        });
-                    }else{
-                        enter = true;
-                    }
-                }//end if
-                else{
-                    enter = true;
-                }
                 //完成初始化,延时两秒进入主界面
                 Message msg = new Message();
                 msg.what = ENTER_APP;
                 mHandler.sendMessageDelayed(msg, 2000);
             }//end run
         });
-
-
     }
 
     @Override

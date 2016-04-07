@@ -2,6 +2,7 @@ package com.mmrx.yunliao.model.bean.sms;/**
  * Created by mmrx on 16/3/8.
  */
 
+import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 
 /**
@@ -10,7 +11,7 @@ import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
  * 描述:  和同一个号码往来的短信作为一个smsThread存于数据库中
  *     显示为最新的时间和内容,表threads的实体对象
  */
-public class SmsThreadBean {
+public class SmsThreadBean implements ISmsListBean{
     private int     _id;//数据库序号
     private long    date_long;//最新会话的时间,long型
     private String   date_str;//同上,string型
@@ -18,6 +19,7 @@ public class SmsThreadBean {
     private String   recipient_ids;//表canonical_addresses 序号
     private String   addresses;//联系人电话
     private String   snippet;//最新会话内容
+    private String   contact;//联系人备注
     private boolean  read;//是否阅读,0未读,1已读,这里用boolean来表示
     /*type
         ALL    = 0;
@@ -120,6 +122,14 @@ public class SmsThreadBean {
         this.addresses = addresses;
     }
 
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
     @Override
     public String toString() {
         return "SmsThreadBean{" +
@@ -133,5 +143,33 @@ public class SmsThreadBean {
                 ", read=" + read +
                 ", type=" + type +
                 '}';
+    }
+
+    @Override
+    public String getContacts() {
+        return this.contact;
+    }
+
+    @Override
+    public String getDate() {
+        return getDate_str();
+    }
+
+    @Override
+    public Class getClassType() {
+        return SmsThreadBean.class;
+    }
+
+    @Override
+    public long getDateLong() {
+        return getDate_long();
+    }
+
+    @Override
+    public int compareTo(ISmsListBean another) {
+        if(this.getDateLong() > another.getDateLong())
+            return 1;
+        else
+            return -1;
     }
 }

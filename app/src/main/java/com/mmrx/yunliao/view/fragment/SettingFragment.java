@@ -95,6 +95,12 @@ public class SettingFragment extends PreferenceFragment
         super.onCreate(savedInstanceState);
         tag = getArguments().getString(key);
         addPreferencesFromResource(getPreferenceId(tag));
+//        init();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         init();
     }
 

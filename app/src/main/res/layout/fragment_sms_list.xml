@@ -1,14 +1,37 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mmrx.yunliao.view.fragment.SmsListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update blank fragment layout
     <TextView android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="短信列表fragment"
-        android:textSize="40dp"/>
+        android:textSize="40dp"/>-->
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/sms_list_fragment_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="search"/>
+
+    <com.fortysevendeg.swipelistview.SwipeListView
+        xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sms_list_fragment_list"
+        android:listSelector="#00000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/sms_list_fragment_search_view"
+        swipe:swipeFrontView="@+id/front"
+        swipe:swipeBackView="@+id/back"
+        swipe:swipeActionLeft="reveal"
+        swipe:swipeMode="left"
+        swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeOpenOnLongPress="false"
+        swipe:swipeAnimationTime="500"
+        swipe:swipeOffsetLeft="230dp" />
+
+</RelativeLayout>

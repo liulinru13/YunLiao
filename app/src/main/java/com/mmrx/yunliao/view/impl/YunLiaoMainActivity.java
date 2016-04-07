@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.presenter.FragmentPresenter;
+import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
@@ -76,6 +77,12 @@ public class YunLiaoMainActivity extends AbsActivity
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MiddlewareProxy.getInstance().checkDefaultSmsApp(this);
     }
 
     /**

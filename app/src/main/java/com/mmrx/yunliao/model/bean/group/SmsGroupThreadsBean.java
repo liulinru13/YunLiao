@@ -2,6 +2,7 @@ package com.mmrx.yunliao.model.bean.group;/**
  * Created by mmrx on 16/3/10.
  */
 
+import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 
 /**
@@ -9,12 +10,14 @@ import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
  * 时间: 16/3/10下午12:10
  * 描述: 群发短信会话数据结构,对应对应ylsmsdb.db中表sms_group_threads_table
  */
-public class SmsGroupThreadsBean {
+public class SmsGroupThreadsBean implements ISmsListBean {
     private int     _id;//主键id
     private int     message_count;//消息数量
     private long    date_long;//最新会话的时间,long型
     private String   date_str;//同上,string型
     private String   snippet;//最新会话内容
+    private String   address;//电话号码,以,隔开
+    private String   contacts;//联系人显示名,以,隔开
 
     public int get_id() {
         return _id;
@@ -55,5 +58,50 @@ public class SmsGroupThreadsBean {
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
+    }
+
+    public void setContacts(String contacts) {
+        this.contacts = contacts;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public String getContacts() {
+        return this.contacts;
+    }
+
+    @Override
+    public String getDate() {
+        return getDate_str();
+    }
+
+    @Override
+    public boolean isRead() {
+        return false;
+    }
+
+    @Override
+    public Class getClassType() {
+        return SmsGroupThreadsBean.class;
+    }
+
+    @Override
+    public long getDateLong() {
+        return getDate_long();
+    }
+
+    @Override
+    public int compareTo(ISmsListBean another) {
+        if(this.getDateLong() > another.getDateLong())
+            return 1;
+        else
+            return -1;
     }
 }

@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':libs:swipelistview'
 //, ':libs:animatelibrary',':libs:MaterialPreference'
