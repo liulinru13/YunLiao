@@ -122,10 +122,6 @@ public class SmsThreadBean implements ISmsListBean{
         this.addresses = addresses;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
     public void setContact(String contact) {
         this.contact = contact;
     }
@@ -147,7 +143,7 @@ public class SmsThreadBean implements ISmsListBean{
 
     @Override
     public String getContacts() {
-        return this.contact;
+        return this.contact.equals("null") ? this.addresses : this.contact;
     }
 
     @Override
@@ -168,8 +164,8 @@ public class SmsThreadBean implements ISmsListBean{
     @Override
     public int compareTo(ISmsListBean another) {
         if(this.getDateLong() > another.getDateLong())
-            return 1;
-        else
             return -1;
+        else
+            return 1;
     }
 }

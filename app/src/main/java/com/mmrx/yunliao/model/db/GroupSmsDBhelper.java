@@ -210,7 +210,7 @@ public class GroupSmsDBhelper {
             isDBnull();
             db = this.mYlDbHelper.getReadableDatabase();
             list = new ArrayList<ISmsListBean>();
-            cursor = db.rawQuery("SELECT * FORM sms_group_threads_table",null);
+            cursor = db.rawQuery("SELECT * FROM sms_group_threads_table",null);
             while (cursor.moveToNext()){
                 SmsGroupThreadsBean bean = new SmsGroupThreadsBean();
                 bean.set_id(cursor.getInt(0));
@@ -218,21 +218,16 @@ public class GroupSmsDBhelper {
                 bean.setDate_long(cursor.getLong(2));
                 bean.setSnippet(cursor.getString(3));
 
-                cursor_person = db.rawQuery("SELECT person,address FROM sms_group_table,sms_user_table "
+                cursor_person = db.rawQuery("SELECT address FROM sms_group_table,sms_user_table "
                         + "WHERE sms_group_table._id = ? "
                         + "AND sms_user_table.group_id = sms_group_table.thread_id", new String[]{bean.get_id() + ""});
                 StringBuilder sb_addr = new StringBuilder();
-                StringBuilder sb_pers = new StringBuilder();
                 while (cursor_person.moveToNext()){
                     sb_addr.append(cursor_person.getInt(0));
                     sb_addr.append(",");
-
-                    sb_pers.append(cursor_person.getInt(1));
-                    sb_pers.append(",");
                 }
                 cursor_person.close();
-                bean.setContacts(sb_pers.toString().substring(0, sb_pers.length() - 1));
-                bean.setContacts(sb_addr.toString().substring(0, sb_addr.length() - 1));
+                bean.setAddress(sb_addr.toString().substring(0, sb_addr.length() - 1));
                 list.add(bean);
             }
             cursor.close();

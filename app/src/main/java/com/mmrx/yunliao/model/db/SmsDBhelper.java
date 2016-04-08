@@ -202,6 +202,20 @@ public class SmsDBhelper{
     }
 
     /**
+     * 更新threads的阅读状态
+     * @param context
+     * @param bean
+     * @param read
+     * @return
+     */
+    public boolean updateSmsThreadReadState(Context context,SmsThreadBean bean,boolean read){
+        ContentValues values = new ContentValues();
+        values.put("read",read?1:0);
+        return context.getContentResolver().update(Uri.parse(Constant.SMS_THREADS_URI),
+                values,"_id = ?",new String[]{bean.get_id()+""}) > 0;
+    }
+
+    /**
      * 辅助方法,根据threadId判断其中是否有被锁定的信息记录
      * @param resolver
      * @param threadBean

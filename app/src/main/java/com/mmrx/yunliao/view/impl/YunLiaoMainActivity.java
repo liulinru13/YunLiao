@@ -17,6 +17,7 @@ import com.mmrx.yunliao.presenter.FragmentPresenter;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
+import com.mmrx.yunliao.view.fragment.BackUpFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
 
@@ -28,6 +29,8 @@ public class YunLiaoMainActivity extends AbsActivity
 
     private SmsListFragment mListFragment;
     private SmsEditFragment mEditFragment;
+    private BackUpFragment mBackUpFragment;
+
     private FragmentPresenter mPresenter;
     private FloatingActionButton mFloatBn;
     private Toolbar mToolbar;
@@ -51,7 +54,7 @@ public class YunLiaoMainActivity extends AbsActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //显示短信列表页面
-        mPresenter.putFragment(mListFragment, mEditFragment);
+        mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment);
         mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag());
     }
 
@@ -61,6 +64,7 @@ public class YunLiaoMainActivity extends AbsActivity
                 R.id.fragment_container,this);
         mListFragment = new SmsListFragment();
         mEditFragment = new SmsEditFragment();
+        mBackUpFragment = new BackUpFragment();
     }
 
     @Override
@@ -135,7 +139,8 @@ public class YunLiaoMainActivity extends AbsActivity
 
         //备份
         if (id == R.id.nav_back_up) {
-
+            mDrawer.closeDrawer(GravityCompat.START);
+            mPresenter.fragmentSelection_show_hide(mBackUpFragment.getFragmentTag());
         }
         //设置
         else if (id == R.id.nav_setting) {

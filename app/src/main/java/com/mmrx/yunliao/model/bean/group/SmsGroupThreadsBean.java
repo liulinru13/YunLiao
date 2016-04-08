@@ -74,7 +74,7 @@ public class SmsGroupThreadsBean implements ISmsListBean {
 
     @Override
     public String getContacts() {
-        return this.contacts;
+        return this.contacts == null ? this.address : this.contacts;
     }
 
     @Override
@@ -100,8 +100,8 @@ public class SmsGroupThreadsBean implements ISmsListBean {
     @Override
     public int compareTo(ISmsListBean another) {
         if(this.getDateLong() > another.getDateLong())
-            return 1;
-        else
             return -1;
+        else
+            return 1;
     }
 }

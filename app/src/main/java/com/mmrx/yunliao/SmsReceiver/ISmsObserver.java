@@ -9,5 +9,5 @@ public interface ISmsObserver {
     /**
      * 接口未完成
      */
-    void onSmsComing();
+//    void onSmsComing();
 }

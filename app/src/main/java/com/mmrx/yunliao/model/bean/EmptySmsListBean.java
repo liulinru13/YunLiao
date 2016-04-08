@@ -37,4 +37,9 @@ public class EmptySmsListBean implements ISmsListBean{
     public long getDateLong() {
         return 0;
     }
+
+    @Override
+    public int compareTo(ISmsListBean another) {
+        return 0;
+    }
 }

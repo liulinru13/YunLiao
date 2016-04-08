@@ -8,11 +8,11 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.bumptech.glide.Glide;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.bean.EmptySmsListBean;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
+import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.presenter.adapter.SmsListAdapter;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -28,7 +27,9 @@ import butterknife.ButterKnife;
  * 时间: 16/4/7下午12:31
  * 描述: 负责短信列表页面展示管理的Presenter
  */
-public class SmsListPresenter implements IContentPresenter,AdapterView.OnItemClickListener{
+public class SmsListPresenter implements IContentPresenter,
+        AdapterView.OnItemClickListener,
+        SmsListAdapter.ISwipeButtonClickListener {
 
     private final int UPDATE_LIST = 0;//更新listView
 
@@ -64,7 +65,7 @@ public class SmsListPresenter implements IContentPresenter,AdapterView.OnItemCli
     public void initComponent(){
         //先使用空内容填充页面
         makeEmptyList();
-        mAdapter = new SmsListAdapter(this.mSmsListFragment.getActivity(),mList);
+        mAdapter = new SmsListAdapter(this.mSmsListFragment.getActivity(),mList,this);
         mListView = (SwipeListView)mView.findViewById(R.id.sms_list_fragment_list);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
@@ -107,4 +108,28 @@ public class SmsListPresenter implements IContentPresenter,AdapterView.OnItemCli
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
+
+    @Override
+    public void onDeleteBnClicked(int position) {
+        if(MiddlewareProxy.getInstance().deleteSmsThread(
+                this.mSmsListFragment.getActivity(), mList.get(position))){
+            mList.remove(position);
+            mListView.closeAnimate(position);
+            mAdapter.notifyDataSetChanged();
+
+        }
+    }
+
+    @Override
+    public void onMarkBnClicked(int position) {
+        if(MiddlewareProxy.getInstance()
+                .setSmsThreadsRead(this.mSmsListFragment.getActivity(),
+                        mList.get(position))) {
+            ((SmsThreadBean) mList.get(position)).setRead(true);
+            mListView.closeAnimate(position);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+
 }

@@ -10,6 +10,8 @@ import android.os.Build;
 import android.provider.Telephony;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.mmrx.yunliao.model.bean.contacts.ContactsBean;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.model.db.ContactsDBhelper;
@@ -19,6 +21,7 @@ import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.presenter.IClean;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -181,6 +184,8 @@ public class MiddlewareProxy implements IClean{
         return mCacheThreadPool;
     }
 
+    /*===================短信操作===================*/
+
     /**
      * 获取短信的thread数组
      * @param context
@@ -193,17 +198,21 @@ public class MiddlewareProxy implements IClean{
             for(ISmsListBean bean : list){
                 SmsThreadBean stb = (SmsThreadBean)bean;
                 String displayName = this.mContactsDBhelper.getPeopleNameFromPerson(context, stb.getAddresses());
-                if(displayName == null)
-                    stb.setContact(stb.getAddresses());
-                else
-                    stb.setContact(displayName);
+                stb.setContact(displayName);
+
             }
         }
         return list;
     }
 
+    /**
+     * 获取所有的群发记录数组
+     * @param context
+     * @return
+     */
     public List<ISmsListBean> getSmsGroupThreadList(Context context){
         List<ISmsListBean> list = this.mGroupSmsDBhelper.getAllGroupThread();
+        List<ISmsListBean> listRes = new ArrayList<ISmsListBean>();
         if(list != null && list.size() >0){
             //获取联系人信息
             for(ISmsListBean bean : list){
@@ -220,11 +229,43 @@ public class MiddlewareProxy implements IClean{
                 }else{
                     sgtb.setContacts(sgtb.getAddress());
                 }
+                listRes.add(bean);
             }
         }
+        return listRes;
+    }
+
+    public boolean deleteSmsThread(Context context,ISmsListBean bean){
+        boolean popUpDialog = false;
+        if(bean instanceof SmsThreadBean){
+            popUpDialog = !mSmsDBhelper.deleteSmsThreadById(context,(SmsThreadBean)bean);
+        }else if(bean instanceof SmsGroupThreadsBean){
+            popUpDialog = !mGroupSmsDBhelper.deleteGroupSmsThread((SmsGroupThreadsBean)bean);
+        }
+
+        if(popUpDialog){
+            new MaterialDialog.Builder(context)
+                    .title("删除失败")
+                    .content("记录内含有锁定状态的消息记录,请检查后再试")
+                    .negativeText("确定")
+                    .show();
+        }
+        return !popUpDialog;
+    }
+
+    public boolean setSmsThreadsRead(Context context,ISmsListBean bean){
+        if(bean instanceof SmsThreadBean){
+            return mSmsDBhelper.updateSmsThreadReadState(context,(SmsThreadBean)bean,true);
+        }else if(bean instanceof SmsGroupThreadsBean){
+            return false;
+        }
+        return false;
+    }
 
 
-        return list;
+    /*===================联系人操作===================*/
+    public List<ContactsBean> getAllContacts(Context context){
+        return this.mContactsDBhelper.getAllContactsList(context);
     }
 
     @Override

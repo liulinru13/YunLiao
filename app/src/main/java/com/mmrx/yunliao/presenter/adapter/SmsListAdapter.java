@@ -30,9 +30,21 @@ public class SmsListAdapter extends BaseAdapter{
 
     private List<ISmsListBean> mList;
     private Context mContext;
+    private ISwipeButtonClickListener mListener;
     public SmsListAdapter(Context context,List<ISmsListBean> list){
         this.mList = list;
         this.mContext = context;
+    }
+
+    public SmsListAdapter(Context context,List<ISmsListBean> list,
+                          ISwipeButtonClickListener listener){
+        this.mList = list;
+        this.mContext = context;
+        this.mListener = listener;
+    }
+
+    public void setSwipeListViewButtonListener(ISwipeButtonClickListener mListener) {
+        this.mListener = mListener;
     }
 
     @Override
@@ -75,6 +87,8 @@ public class SmsListAdapter extends BaseAdapter{
             public void onClick(View v) {
                 int posi = (Integer) v.getTag();
                 L.i(TAG, "mark position is " + posi);
+                if(SmsListAdapter.this.mListener != null)
+                    SmsListAdapter.this.mListener.onMarkBnClicked(posi);
             }
         });
         vh.delete.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +96,8 @@ public class SmsListAdapter extends BaseAdapter{
             public void onClick(View v) {
                 int posi = (Integer)v.getTag();
                 L.i(TAG,"delete position is " +posi);
+                if(SmsListAdapter.this.mListener != null)
+                    SmsListAdapter.this.mListener.onDeleteBnClicked(posi);
             }
         });
 
@@ -106,5 +122,19 @@ public class SmsListAdapter extends BaseAdapter{
         public ViewHolder(View view){
             ButterKnife.bind(this,view);
         }
+    }
+
+    public interface ISwipeButtonClickListener{
+        /**
+         * 删除按钮按下
+         * @param position
+         */
+        void onDeleteBnClicked(int position);
+
+        /**
+         * 标记已读按钮按下
+         * @param position
+         */
+        void onMarkBnClicked(int position);
     }
 }
