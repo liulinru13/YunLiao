@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.SmsReceiver.ISmsObserver;
+import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.EmptySmsListBean;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
@@ -29,7 +31,8 @@ import butterknife.ButterKnife;
  */
 public class SmsListPresenter implements IContentPresenter,
         AdapterView.OnItemClickListener,
-        SmsListAdapter.ISwipeButtonClickListener {
+        SmsListAdapter.ISwipeButtonClickListener,
+        ISmsObserver{
 
     private final int UPDATE_LIST = 0;//更新listView
 
@@ -131,5 +134,10 @@ public class SmsListPresenter implements IContentPresenter,
         }
     }
 
-
+    @Override
+    public void onSmsNoticed(int event) {
+        if(event == Constant.FLAG_SMS_NEW_RECEIVED){
+            getData();
+        }
+    }
 }

@@ -10,11 +10,13 @@ import android.widget.AdapterView;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.SmsReceiver.ISmsObserver;
 import com.mmrx.yunliao.model.bean.EmptySmsListBean;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.presenter.IContentPresenter;
 import com.mmrx.yunliao.presenter.SmsListPresenter;
 import com.mmrx.yunliao.presenter.adapter.SmsListAdapter;
+import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.view.IFragmentListener;
 
 import java.util.ArrayList;
@@ -51,6 +53,22 @@ public class SmsListFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         this.mPresenter.initComponent();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(mPresenter instanceof ISmsObserver){
+            MiddlewareProxy.getInstance().setOnSmsChangedListener(tag,(ISmsObserver)mPresenter);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mPresenter instanceof ISmsObserver){
+            MiddlewareProxy.getInstance().removeSmsChangedListener(tag);
+        }
     }
 
     @Override

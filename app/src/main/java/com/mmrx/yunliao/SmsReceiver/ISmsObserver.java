@@ -6,8 +6,10 @@ package com.mmrx.yunliao.SmsReceiver;
  * 该接口的实现类需要在Service里注册
  */
 public interface ISmsObserver {
+
     /**
-     * 接口未完成
+     * 用于接收短信事件
+     * @param event 在Constant类中定义
      */
-//    void onSmsComing();
+    void onSmsNoticed(int event);
 }

@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.Telephony;
 
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
@@ -39,8 +40,8 @@ public class SmsDBhelper{
         List<ISmsListBean> list = null;
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(Uri.parse(Constant.SMS_THREADS_URI),
-                new String[]{"_id","date","message_count","recipient_ids","snippet","read","type"},
-                "type=0",null,null);
+                new String[]{"_id", "date", "message_count", "recipient_ids", "snippet", "read", "type"},
+                "type=0", null, null);
 
         if(cursor != null){
             list = new ArrayList<ISmsListBean>();
@@ -79,9 +80,12 @@ public class SmsDBhelper{
         L.i(TAG,"deleteSmsThreadById is " + bean.get_id());
         ContentResolver resolver = context.getContentResolver();
         //在该threadId下的所有短信记录均未被锁定的前提下才能删除
-        if(resolver != null && !smsIsLocked(resolver,bean))
-            return context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL),
-                    "thread_id=?", new String[]{bean.get_id()+""}) >0;
+        if(resolver != null && !smsIsLocked(resolver,bean)) {
+            context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL),
+                    "thread_id=?", new String[]{bean.get_id() + ""});
+            context.getContentResolver().delete(Uri.withAppendedPath(Uri.parse(Constant.SMS_THREADS),bean.get_id() + ""),null,null);
+            return true;
+        }
         return false;
     }
 
@@ -209,10 +213,15 @@ public class SmsDBhelper{
      * @return
      */
     public boolean updateSmsThreadReadState(Context context,SmsThreadBean bean,boolean read){
+        return updateSmsReadState(context,bean.get_id(),read);
+    }
+
+    private boolean updateSmsReadState(Context context,int threadId,boolean read){
         ContentValues values = new ContentValues();
-        values.put("read",read?1:0);
-        return context.getContentResolver().update(Uri.parse(Constant.SMS_THREADS_URI),
-                values,"_id = ?",new String[]{bean.get_id()+""}) > 0;
+        values.put("read", read ? 1 : 0);
+        return context.getContentResolver()
+                .update(Uri.parse(Constant.SMS_URI_ALL),
+                        values, "thread_id=?", new String[]{threadId + ""}) > 0;
     }
 
     /**

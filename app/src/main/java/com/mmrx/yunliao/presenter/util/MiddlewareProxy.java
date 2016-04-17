@@ -11,6 +11,7 @@ import android.provider.Telephony;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.mmrx.yunliao.SmsReceiver.ISmsObserver;
 import com.mmrx.yunliao.model.bean.contacts.ContactsBean;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
@@ -23,6 +24,7 @@ import com.mmrx.yunliao.presenter.IClean;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,6 +36,8 @@ import java.util.concurrent.Executors;
  */
 public class MiddlewareProxy implements IClean{
     private static MiddlewareProxy mInstance;
+
+    private HashMap<String,ISmsObserver> mSmsObserverMap;
 
     private CustomDialog mDialogFactory;//对话框工厂
     private SmsDBhelper mSmsDBhelper;//sms数据库操作类
@@ -50,6 +54,7 @@ public class MiddlewareProxy implements IClean{
         mContactsDBhelper = ContactsDBhelper.getInstance();
         mCacheThreadPool = Executors.newCachedThreadPool();
         mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        mSmsObserverMap = new HashMap<String,ISmsObserver>();
     }
 
     public static MiddlewareProxy getInstance(){
@@ -67,6 +72,35 @@ public class MiddlewareProxy implements IClean{
         if(context == null)
             return;
         mGroupSmsDBhelper.initDB(context);
+    }
+
+    /**
+     * 添加sms监听
+     * @param key
+     * @param observer
+     */
+    public void setOnSmsChangedListener(String key,ISmsObserver observer){
+        if(this.mSmsObserverMap.containsKey(key)){
+            this.mSmsObserverMap.remove(key);
+            this.mSmsObserverMap.put(key,observer);
+        }
+        else{
+            this.mSmsObserverMap.put(key,observer);
+        }
+    }
+
+    /**
+     * 移除sms监听
+     * @param key
+     */
+    public void removeSmsChangedListener(String key){
+        if(this.mSmsObserverMap.containsKey(key)){
+            this.mSmsObserverMap.remove(key);
+        }
+    }
+
+    public HashMap<String,ISmsObserver> getmSmsObserverMap(){
+        return this.mSmsObserverMap;
     }
 
     /**
@@ -267,6 +301,8 @@ public class MiddlewareProxy implements IClean{
     public List<ContactsBean> getAllContacts(Context context){
         return this.mContactsDBhelper.getAllContactsList(context);
     }
+
+//    public
 
     @Override
     public void clear() {

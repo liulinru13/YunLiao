@@ -7,9 +7,10 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <application
         android:name=".YunLiaoAppliaction"
         android:allowBackup="false"
@@ -35,7 +36,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
-<!--                 <category android:name="android.intent.category.DEFAULT" /> -->
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="sms" />
@@ -46,13 +47,19 @@
         </activity>
 
         <!-- 注册短信和彩信广播监听器以及短信后台服务 android4.4及其以上版本 需要 -->
+        <!-- 短信监听 -->
         <receiver
             android:name=".SmsReceiver.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS" >
             <intent-filter>
+
+                <!-- 短信抵达对方设备监听 -->
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
+                <!-- 新短信抵达监听 -->
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        <!-- 彩信到达监听 -->
         <receiver
             android:name=".SmsReceiver.EmptyMmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH" >
@@ -63,8 +70,9 @@
             </intent-filter>
         </receiver>
 
+        <!-- 短信 -->
         <service
-            android:name=".SmsReceiver.SmsSendService"
+            android:name=".SmsReceiver.SmsService"
             android:exported="true"
             android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE" >
             <intent-filter>

@@ -13,6 +13,7 @@ public class Constant {
     public static final String SMS_URI_ALL = "content://sms/";
     //threads表uri
     public static final String SMS_THREADS_URI = "content://mms-sms/conversations?simple=true";
+    public static final String SMS_THREADS = "content://sms/conversations";
     //Canonical_address表uri
     public static final String SMS_ADDRESS_URI = "content://mms-sms/canonical-addresses";
     //sms收件箱
@@ -109,4 +110,13 @@ public class Constant {
     public static final String CONTROL_SMS_CLEAN_DATA = "qk_%s";
     public static final String CONTROL_SMS_GET_LOCATION = "loca_%s_%s";
     public static final String CONTROL_SMS_ENCODE_DATA = "enc_%s";
+
+    /*********事件标示********/
+    public static final int FLAG = 0;
+    //短信事件标示
+    public static final int FLAG_SMS_NEW_RECEIVED = FLAG + 1;//接收新短信
+    public static final int FLAG_SMS_DELIVERED = FLAG + 2;//短信抵达
+    public static final int FLAG_SMS_SEND_FAILED = FLAG + 3;//短信发送失败
+
+
 }
