@@ -11,7 +11,9 @@ import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.model.bean.sms.SmsBean;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
+import com.mmrx.yunliao.presenter.util.EncodeDecodeUtil;
 import com.mmrx.yunliao.presenter.util.L;
+import com.mmrx.yunliao.presenter.util.SPUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,19 +38,31 @@ public class SmsDBhelper{
      * @return List SmsThreadBean集合
      * 从数据库中读取所有的短信会话记录
      * */
-    public List<ISmsListBean> queryAllSmsThreads(Context context){
+    public synchronized List<ISmsListBean> queryAllSmsThreads(Context context){
         List<ISmsListBean> list = null;
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(Uri.parse(Constant.SMS_THREADS_URI),
                 new String[]{"_id", "date", "message_count", "recipient_ids", "snippet", "read", "type"},
                 "type=0", null, null);
-
+        //是否加密存储
+        boolean isEncode = SPUtil.getPreference(context).getBoolean(Constant.SP_SETTING_MAIN_ENCODE_SWITCH,false);
+        //是否加密显示
+        boolean isEncodeShow = SPUtil.getPreference(context).getBoolean(Constant.SP_SETTING_MAIN_ENCODE_SHOW,false);
         if(cursor != null){
             list = new ArrayList<ISmsListBean>();
             while(cursor.moveToNext()){
-                SmsThreadBean bean = new SmsThreadBean(cursor.getInt(0),cursor.getLong(1),
-                        cursor.getInt(2),cursor.getString(3),cursor.getString(4),
-                        cursor.getInt(5),cursor.getInt(6));
+                SmsThreadBean bean = null;
+                //需要进行解密显示
+                if(isEncode && !isEncodeShow){
+                    bean = new SmsThreadBean(cursor.getInt(0), cursor.getLong(1),
+                            cursor.getInt(2), cursor.getString(3), EncodeDecodeUtil.getInstance().decode(cursor.getString(4)),
+                            cursor.getInt(5), cursor.getInt(6));
+                }
+                else {
+                    bean = new SmsThreadBean(cursor.getInt(0), cursor.getLong(1),
+                            cursor.getInt(2), cursor.getString(3), cursor.getString(4),
+                            cursor.getInt(5), cursor.getInt(6));
+                }
                 //如果同一个会话具有多个发送地址
                 if(bean.getRecipient_ids().contains(" ")){
                     String[] addrs = bean.getRecipient_ids().split(" ");
@@ -76,7 +90,7 @@ public class SmsDBhelper{
      * @return 是否删除成功
      * 根据所给的thread数据结构删除数据库中对应的记录
      * */
-    public boolean deleteSmsThreadById(Context context,SmsThreadBean bean){
+    public synchronized boolean deleteSmsThreadById(Context context,SmsThreadBean bean){
         L.i(TAG,"deleteSmsThreadById is " + bean.get_id());
         ContentResolver resolver = context.getContentResolver();
         //在该threadId下的所有短信记录均未被锁定的前提下才能删除
@@ -96,7 +110,7 @@ public class SmsDBhelper{
      * @param resolver_ ContentResolver类对象,可为null
      * @return sms的地址,如果不存在,返回值为null
      * */
-    private String querySmsAddressByThreadId(Context context,String id,ContentResolver resolver_){
+    private synchronized String querySmsAddressByThreadId(Context context,String id,ContentResolver resolver_){
         if(id == null)
             return null;
         ContentResolver resolver = resolver_;
@@ -119,7 +133,7 @@ public class SmsDBhelper{
      * @return 操作结果
      * 根据id来删除某一条短信
      * */
-    public boolean deleteSMSById(Context context,SmsBean sms){
+    public synchronized boolean deleteSMSById(Context context,SmsBean sms){
 
         L.i(TAG, "deleteSMSById" + sms.get_id());
         if(sms.getLocked() == 0)
@@ -139,16 +153,16 @@ public class SmsDBhelper{
      * @param body 内容
      *
      */
-    public void insertSmsToDB(Context context,long date,int read
-            ,int type,String address,String body){
-        ContentValues values = new ContentValues();
-        values.put("date",date);
-        values.put("address",address);
-        values.put("body",body);
-        values.put("read", read);
-        values.put("type", type);
-        context.getContentResolver().insert(Uri.parse(getUriByType(type)), values);
-    }
+//    public synchronized void insertSmsToDB(Context context,long date,int read
+//            ,int type,String address,String body){
+//        ContentValues values = new ContentValues();
+//        values.put("date",date);
+//        values.put("address",address);
+//        values.put("body",body);
+//        values.put("read", read);
+//        values.put("type", type);
+//        context.getContentResolver().insert(Uri.parse(getUriByType(type)), values);
+//    }
 
     /**
      * 根据threadID获取全部sms会话记录,根据时间升序排序
@@ -156,7 +170,7 @@ public class SmsDBhelper{
      * @param threadBean
      * @return 会话的list
      */
-    public List<SmsBean> queryAllSmsByThreadId(Context context,SmsThreadBean threadBean){
+    public synchronized List<SmsBean> queryAllSmsByThreadId(Context context,SmsThreadBean threadBean){
         List<SmsBean> list = null;
         ContentResolver resolver = context.getContentResolver();
         if(resolver != null && threadBean != null){
@@ -198,7 +212,7 @@ public class SmsDBhelper{
      * @param isLocked
      * @return
      */
-    public boolean updateSmsLockState(Context context,SmsBean smsBean,boolean isLocked){
+    public synchronized boolean updateSmsLockState(Context context,SmsBean smsBean,boolean isLocked){
         ContentValues values = new ContentValues();
         values.put("locked",isLocked?1:0);
         return context.getContentResolver().update(Uri.parse(getUriByType(0)),
@@ -214,6 +228,59 @@ public class SmsDBhelper{
      */
     public boolean updateSmsThreadReadState(Context context,SmsThreadBean bean,boolean read){
         return updateSmsReadState(context,bean.get_id(),read);
+    }
+
+    /**
+     * md5 加密
+     * @param context
+     */
+    public synchronized void encodeSms(Context context){
+        ContentResolver resolver = context.getContentResolver();
+        EncodeDecodeUtil util = EncodeDecodeUtil.getInstance();
+        Uri uri = Uri.parse(Constant.SMS_URI_ALL);
+        int id;
+        String body;
+        int date;
+        ContentValues values = new ContentValues();
+        Cursor cursor = resolver.query(uri,
+                new String[]{"_id", "body","date"}, null, null, null);
+        while (cursor.moveToNext()){
+            values.clear();
+            id = cursor.getInt(0);
+            body = cursor.getString(1);
+            date = cursor.getInt(2);
+            values.put("body",util.encode(body));
+            values.put("date",date);
+            L.i(TAG, "encode body = " + values.get("body"));
+            resolver.update(Uri.withAppendedPath(uri,id+""),values,null,null);
+        }
+        cursor.close();
+    }
+
+    /**
+     * md5 解密
+     * @param context
+     */
+    public synchronized void decodeSms(Context context){
+        ContentResolver resolver = context.getContentResolver();
+        EncodeDecodeUtil util = EncodeDecodeUtil.getInstance();
+        Uri uri = Uri.parse(Constant.SMS_URI_ALL);
+        int id;
+        String body;
+        int date;
+        ContentValues values = new ContentValues();
+        Cursor cursor = resolver.query(uri,
+                new String[]{"_id", "body","date"}, null, null, null);
+        while (cursor.moveToNext()){
+            values.clear();
+            id = cursor.getInt(0);
+            body = cursor.getString(1);
+            date = cursor.getInt(2);
+            values.put("body", util.decode(body));
+            values.put("date",date);
+            resolver.update(Uri.withAppendedPath(uri,id+""),values,null,null);
+        }
+        cursor.close();
     }
 
     private boolean updateSmsReadState(Context context,int threadId,boolean read){

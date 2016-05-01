@@ -44,7 +44,7 @@ public class ContactsDBhelper {
      * @param address
      * @return
      */
-    public String getPeopleNameFromPerson(Context context,String address){
+    public synchronized String getPeopleNameFromPerson(Context context,String address){
         if(address == null || address == ""){
             return "( no address )\n";
         }
@@ -72,7 +72,7 @@ public class ContactsDBhelper {
      * @param address
      * @return
      */
-    public byte[] getContactIconFromAddress(Context context,String address){
+    public synchronized byte[] getContactIconFromAddress(Context context,String address){
         byte[] iconBytes = null;
 
         if(address == null || address == ""){
@@ -94,7 +94,7 @@ public class ContactsDBhelper {
      * @param context
      * @return
      */
-    public List<ContactsBean> getAllContactsList(Context context){
+    public synchronized List<ContactsBean> getAllContactsList(Context context){
         List<ContactsBean> list = new ArrayList<ContactsBean>();
         //搜索Contacts表
         Cursor cursor = context.getContentResolver().query(CONTACT_URL,null,null,null,null);

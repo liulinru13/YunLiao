@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 
         import android.content.Context;
         import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class SPUtil
 {
@@ -139,6 +140,15 @@ public class SPUtil
         SharedPreferences sp = context.getSharedPreferences(fileName,
                 Context.MODE_PRIVATE);
         return sp.getAll();
+    }
+
+    /**
+     * 获得Preference的sp
+     * @param context
+     * @return
+     */
+    public static SharedPreferences getPreference(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     /**

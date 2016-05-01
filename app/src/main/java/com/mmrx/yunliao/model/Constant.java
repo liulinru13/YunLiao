@@ -65,10 +65,12 @@ public class Constant {
     //文件名
     public static final String SP_F_THEME = "sp_file_name_theme";//保存主题信息的sp文件名
     public static final String SP_F_SETTING_CODE = "sp_file_name_setting_code";//保存密码的sp文件名称
+    public static final String SP_F_CONTROL = "sp_file_control";//地址回执电话号码
     //key值
     public static final String SP_K_THEME = "sp_key_theme";//主题的key值
-    public static final String SP_K_SETTING_CODE = "sp_key_setting_code";//主题的key值
-
+    public static final String SP_K_SETTING_CODE = "sp_key_setting_code";//密码的key值
+    public static final String SP_K_LOCATION = "sp_key_location_phone";//回执地址电话号
+    public static final String SP_K_ENC = "sp_key_enc_value";//是否短信加密了
 
     //设置页面的信息
     public static final String SP_SETTING_MAIN_NOTICE = "pref_notice";
@@ -117,6 +119,7 @@ public class Constant {
     public static final int FLAG_SMS_NEW_RECEIVED = FLAG + 1;//接收新短信
     public static final int FLAG_SMS_DELIVERED = FLAG + 2;//短信抵达
     public static final int FLAG_SMS_SEND_FAILED = FLAG + 3;//短信发送失败
+    public static final int FLAT_SMS_REFRESH = FLAG + 4;//短信显示页面刷新数据
 
 
 }

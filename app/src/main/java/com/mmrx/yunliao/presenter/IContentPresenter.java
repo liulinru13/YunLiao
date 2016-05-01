@@ -11,4 +11,9 @@ public interface IContentPresenter {
      * 初始化view控件
      */
     void initComponent();
+
+    /**
+     * 刷新页面
+     */
+    void refreshView();
 }

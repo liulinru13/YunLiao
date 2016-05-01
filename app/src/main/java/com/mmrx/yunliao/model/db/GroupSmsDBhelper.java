@@ -13,6 +13,7 @@ import com.mmrx.yunliao.model.bean.group.SmsGroupBean;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThreadSend;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
 import com.mmrx.yunliao.model.exception.YlDBisNullExcetption;
+import com.mmrx.yunliao.presenter.util.EncodeDecodeUtil;
 import com.mmrx.yunliao.presenter.util.L;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class GroupSmsDBhelper {
      * @param sendInfo
      * @throws Exception
      */
-    public void insertNewGroupSms(SmsGroupThreadSend sendInfo) throws Exception{
+    public synchronized void insertNewGroupSms(SmsGroupThreadSend sendInfo) throws Exception{
         SQLiteDatabase db = null;
         try{
             isDBnull();
@@ -81,7 +82,7 @@ public class GroupSmsDBhelper {
      * @param sendInfo
      * @throws Exception
      */
-    public void insertSingleGroupSms(SmsGroupThreadSend sendInfo) throws Exception{
+    public synchronized void insertSingleGroupSms(SmsGroupThreadSend sendInfo) throws Exception{
         SQLiteDatabase db = null;
         try{
             isDBnull();
@@ -111,7 +112,7 @@ public class GroupSmsDBhelper {
      * 删除数据库内群发短信的某组记录
      * @param threadsBean
      */
-    public boolean deleteGroupSmsThread(SmsGroupThreadsBean threadsBean){
+    public synchronized boolean deleteGroupSmsThread(SmsGroupThreadsBean threadsBean){
         SQLiteDatabase db = null;
         boolean result = false;
         try{
@@ -131,7 +132,7 @@ public class GroupSmsDBhelper {
      * 删除数据库内群发短信的某条记录
      * @param groupBean
      */
-    public boolean deleteGroupSmsThread(SmsGroupBean groupBean){
+    public synchronized boolean deleteGroupSmsThread(SmsGroupBean groupBean){
         SQLiteDatabase db = null;
         boolean result = false;
         try{
@@ -156,13 +157,42 @@ public class GroupSmsDBhelper {
         return result;
     }
 
+    public synchronized boolean deleteAll(){
+        SQLiteDatabase db = null;
+        boolean result = false;
+        try {
+            isDBnull();
+            db = this.mYlDbHelper.getWritableDatabase();
+            db.beginTransaction();
+            db.execSQL("DELETE FROM sms_user_table");
+            db.execSQL("update sqlite_sequence set seq=0 where name='sms_user_table'");
+
+            db.execSQL("DELETE FROM sms_group_table");
+            db.execSQL("update sqlite_sequence set seq=0 where name='sms_group_table'");
+
+            db.execSQL("DELETE FROM sms_group_threads_table");
+            db.execSQL("update sqlite_sequence set seq=0 where name='sms_group_threads_table'");
+
+            db.setTransactionSuccessful();
+            result = true;
+            //update sqlite_sequence set seq=0 where name='表名';
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(db != null)
+                db.endTransaction();
+        }
+
+        return result;
+    }
+
     /**
      * 更新群发短信数据库中短信发送状态
      * @param userBean
      * @param status
      * @return 是否成功更新
      */
-    public boolean updateGroupSmsStatus(SmsCroupUserBean userBean,Constant.SMS_GROUP_SATTUS status){
+    public synchronized boolean updateGroupSmsStatus(SmsCroupUserBean userBean,Constant.SMS_GROUP_SATTUS status){
         SQLiteDatabase db = null;
         int row = 0;
         try{
@@ -183,7 +213,7 @@ public class GroupSmsDBhelper {
      * @param isLocked
      * @return
      */
-    public boolean updateSmsLockState(SmsGroupBean groupBean,boolean isLocked){
+    public synchronized boolean updateSmsLockState(SmsGroupBean groupBean,boolean isLocked){
         SQLiteDatabase db = null;
         int row = 0;
         try{
@@ -202,7 +232,7 @@ public class GroupSmsDBhelper {
      * 获取群发记录中的thread数组
      * @return
      */
-    public List<ISmsListBean> getAllGroupThread(){
+    public synchronized List<ISmsListBean> getAllGroupThread(){
         List<ISmsListBean> list = null;
         SQLiteDatabase db = null;
         Cursor cursor = null,cursor_person = null;
@@ -210,7 +240,7 @@ public class GroupSmsDBhelper {
             isDBnull();
             db = this.mYlDbHelper.getReadableDatabase();
             list = new ArrayList<ISmsListBean>();
-            cursor = db.rawQuery("SELECT * FROM sms_group_threads_table",null);
+            cursor = db.rawQuery("SELECT * FROM sms_group_threads_table", null);
             while (cursor.moveToNext()){
                 SmsGroupThreadsBean bean = new SmsGroupThreadsBean();
                 bean.set_id(cursor.getInt(0));
@@ -241,6 +271,70 @@ public class GroupSmsDBhelper {
         }
 
         return list;
+    }
+
+    /**
+     * utf8 加密
+     */
+    public synchronized void encodeSms(){
+        SQLiteDatabase db = null;
+        try{
+            isDBnull();
+            db = this.mYlDbHelper.getWritableDatabase();
+            db.beginTransaction();
+            int id;
+            String body;
+            Cursor cursor = db.rawQuery("SELECT _id,body FROM sms_group_table",null,null);
+            ContentValues values = new ContentValues();
+            EncodeDecodeUtil util = EncodeDecodeUtil.getInstance();
+            while (cursor.moveToNext()){
+                values.clear();
+                id = cursor.getInt(0);
+                body = cursor.getString(1);
+                values.put("body",util.encode(body));
+                db.update("sms_group_table",values,"_id="+id,null);
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(db != null)
+                db.endTransaction();
+        }
+    }
+
+    /**
+     * utf8 解密
+     */
+    public synchronized void decodeSms(){
+        SQLiteDatabase db = null;
+        try{
+            isDBnull();
+            db = this.mYlDbHelper.getWritableDatabase();
+            db.beginTransaction();
+            int id;
+            String body;
+            Cursor cursor = db.rawQuery("SELECT _id,body FROM sms_group_table",null,null);
+            ContentValues values = new ContentValues();
+            EncodeDecodeUtil util = EncodeDecodeUtil.getInstance();
+            while (cursor.moveToNext()){
+                values.clear();
+                id = cursor.getInt(0);
+                body = cursor.getString(1);
+                values.put("body",util.decode(body));
+                db.update("sms_group_table",values,"_id="+id,null);
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(db != null)
+                db.endTransaction();
+        }
     }
 
     /**

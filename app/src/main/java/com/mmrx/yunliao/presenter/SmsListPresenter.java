@@ -76,6 +76,11 @@ public class SmsListPresenter implements IContentPresenter,
         getData();
     }
 
+    @Override
+    public void refreshView(){
+        getData();
+    }
+
 
     private void makeEmptyList(){
         mList = new ArrayList<ISmsListBean>();
@@ -136,7 +141,7 @@ public class SmsListPresenter implements IContentPresenter,
 
     @Override
     public void onSmsNoticed(int event) {
-        if(event == Constant.FLAG_SMS_NEW_RECEIVED){
+        if(event == Constant.FLAG_SMS_NEW_RECEIVED || event == Constant.FLAT_SMS_REFRESH){
             getData();
         }
     }

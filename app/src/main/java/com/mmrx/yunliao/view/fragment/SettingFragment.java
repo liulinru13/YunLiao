@@ -2,6 +2,7 @@ package com.mmrx.yunliao.view.fragment;
 
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,11 +15,13 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.prefs.MaterialDialogPreference;
+import com.afollestad.materialdialogs.prefs.MaterialEditTextPreference;
 import com.jenzz.materialpreference.Preference;
 import com.jenzz.materialpreference.SwitchPreference;
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.presenter.util.L;
+import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.presenter.util.MyToast;
 import com.mmrx.yunliao.presenter.util.SPUtil;
 import com.mmrx.yunliao.view.IFragmentListener;
@@ -30,12 +33,13 @@ import net.frakbot.jumpingbeans.JumpingBeans;
  */
 public class SettingFragment extends PreferenceFragment
         implements Preference.OnPreferenceClickListener,
+        Preference.OnPreferenceChangeListener,
         IFragment{
 
     private String tag;
     private static final String key = "page";
     private final int CLEAN_DATA_FINISHED  = 1;
-
+    private final int ENCODE_DB = 2;
 
     private final String TAG = "SettingFragmentLog";
     private String mTitle;
@@ -65,6 +69,47 @@ public class SettingFragment extends PreferenceFragment
                 case CLEAN_DATA_FINISHED:
                     if(mDialog != null){
                         mDialog.dismiss();
+                    }
+                    break;
+                case ENCODE_DB:
+                    boolean encode = SPUtil.getPreference(SettingFragment.this.getActivity()).getBoolean(Constant.SP_SETTING_MAIN_ENCODE_SWITCH,false);
+                    //加密
+                    if(encode) {
+                        MiddlewareProxy.getInstance().getCacheThreadPool().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                //短信数据库
+                                MiddlewareProxy.getInstance().encodeSmsAll(SettingFragment.this.getActivity());
+                                //云聊数据库
+                                MiddlewareProxy.getInstance().encodeGroupSmsAll();
+                                SPUtil.put(SettingFragment.this.getActivity(), Constant.SP_F_CONTROL, Constant.SP_K_ENC, true);
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MiddlewareProxy.getInstance().notifyAllSmsObserver(Constant.FLAT_SMS_REFRESH);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    //解密
+                    else{
+                        MiddlewareProxy.getInstance().getCacheThreadPool().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                //短信数据库
+                                MiddlewareProxy.getInstance().decodeSmsAll(SettingFragment.this.getActivity());
+                                //云聊数据库
+                                MiddlewareProxy.getInstance().decodeGroupSmsAll();
+                                SPUtil.put(SettingFragment.this.getActivity(), Constant.SP_F_CONTROL, Constant.SP_K_ENC, true);
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MiddlewareProxy.getInstance().notifyAllSmsObserver(Constant.FLAT_SMS_REFRESH);
+                                    }
+                                });
+                            }
+                        });
                     }
                     break;
             }
@@ -112,10 +157,22 @@ public class SettingFragment extends PreferenceFragment
             mMain_private = (Preference) findPreference(Constant.SP_SETTING_MAIN_PRIVATE);
             mMain_control = (Preference) findPreference(Constant.SP_SETTING_MAIN_CONTROL);
 
+            mMain_encode = (SwitchPreference) findPreference(Constant.SP_SETTING_MAIN_ENCODE_SWITCH);
+            mMain_encode_show = (SwitchPreference) findPreference(Constant.SP_SETTING_MAIN_ENCODE_SHOW);
+
+            if((boolean)SPUtil.get(getActivity().getApplicationContext(),Constant.SP_F_CONTROL,Constant.SP_K_ENC,false)){
+                mMain_encode.setDefaultValue(true);
+                mMain_encode_show.setDefaultValue(true);
+            }
+
             mMain_notice.setOnPreferenceClickListener(this);
             mMain_theme.setOnPreferenceClickListener(this);
             mMain_private.setOnPreferenceClickListener(this);
             mMain_control.setOnPreferenceClickListener(this);
+//            mMain_encode.setOnPreferenceClickListener(this);
+//            mMain_encode_show.setOnPreferenceClickListener(this);
+            mMain_encode.setOnPreferenceChangeListener(this);
+
         }else if(tag.equals(Constant.SP_SETTING_MAIN_PRIVATE)) {
             //隐私设置
             mPrivate_code = (Preference) findPreference(Constant.SP_SETTING_PRIV_CODE);
@@ -123,6 +180,28 @@ public class SettingFragment extends PreferenceFragment
 
             mPrivate_code.setOnPreferenceClickListener(this);
             mPrivvate_clear.setOnPreferenceClickListener(this);
+        }else if(tag.equals(Constant.SP_SETTING_MAIN_CONTROL)) {
+            //远程控制设置
+            SharedPreferences sp = SPUtil.getPreference(this.getActivity());
+            final String qkStr = sp.getString(Constant.SP_SETTING_CONTROL_QK, "qk");
+            final String locaStr = sp.getString(Constant.SP_SETTING_CONTROL_LOCA,"loca");
+            final String encStr = sp.getString(Constant.SP_SETTING_CONTROL_ENC,"enc");
+
+
+            MaterialEditTextPreference preference = (MaterialEditTextPreference)findPreference(Constant.SP_SETTING_CONTROL_QK);
+            preference.setSummary("默认命令为"
+                    + " " + qkStr + "_隐私密码\\n不填写内容为默认命令");
+            preference.setDialogMessage("请输入新的命令格式来替换"+qkStr);
+
+            MaterialEditTextPreference preference1 = (MaterialEditTextPreference)findPreference(Constant.SP_SETTING_CONTROL_LOCA);
+            preference1.setSummary("默认命令为"
+                    + " " + locaStr + "_隐私密码_接受手机号\\n不填写内容为默认命令");
+            preference1.setDialogMessage("请输入新的命令格式来替换"+locaStr);
+
+            MaterialEditTextPreference preference2 = (MaterialEditTextPreference)findPreference(Constant.SP_SETTING_CONTROL_ENC);
+            preference2.setSummary("默认命令为"
+                    + " " + encStr + "_隐私密码\\n不填写内容为默认命令");
+            preference2.setDialogMessage("请输入新的命令格式来替换"+encStr);
         }
 
     }
@@ -146,7 +225,7 @@ public class SettingFragment extends PreferenceFragment
                 mListener.onFragmentChanged(Constant.SETTING,key);
                 break;
             case Constant.SP_SETTING_MAIN_CONTROL:
-                mListener.onFragmentChanged(Constant.SETTING,key);
+                mListener.onFragmentChanged(Constant.SETTING, key);
                 break;
             //隐私设置中清空数据选项
             case Constant.SP_SETTING_PRIV_CLEAR:
@@ -156,8 +235,31 @@ public class SettingFragment extends PreferenceFragment
             case Constant.SP_SETTING_PRIV_CODE:
                 popSettingPrivResetPw();
                 break;
+
         }
         return false;
+    }
+
+
+    @Override
+    public boolean onPreferenceChange(android.preference.Preference preference, Object newValue) {
+        final String key = preference.getKey();
+        L.i(TAG, key);
+        switch (key){
+            //加密存储
+            case Constant.SP_SETTING_MAIN_ENCODE_SWITCH:
+
+//                break;
+//            //加密显示
+//            case Constant.SP_SETTING_MAIN_ENCODE_SHOW:
+                mHandler.removeMessages(ENCODE_DB);
+                Message msg = new Message();
+                msg.what = ENCODE_DB;
+                msg.obj = (boolean)newValue;
+                mHandler.sendMessageDelayed(msg, 1500);
+                break;
+        }
+        return true;
     }
 
     private void popSettingPrivResetPw(){
@@ -258,7 +360,8 @@ public class SettingFragment extends PreferenceFragment
 //                            mDialog.getActionButton(DialogAction.POSITIVE).setVisibility(View.GONE);
 //                            mDialog.getActionButton(DialogAction.NEGATIVE).setVisibility(View.GONE);
                             //调用数据清理的方法
-
+                            MiddlewareProxy.getInstance().decodeSmsAll(SettingFragment.this.getActivity());
+                            MiddlewareProxy.getInstance().decodeGroupSmsAll();
                             dialog.dismiss();
                             Message msg = new Message();
                             msg.what = CLEAN_DATA_FINISHED;
@@ -320,5 +423,15 @@ public class SettingFragment extends PreferenceFragment
     @Override
     public String getFragmentTitle() {
         return mTitle;
+    }
+
+    @Override
+    public void onForeground() {
+
+    }
+
+    @Override
+    public void onBackground() {
+
     }
 }

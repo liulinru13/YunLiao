@@ -61,6 +61,7 @@ public class SmsListFragment extends Fragment
         if(mPresenter instanceof ISmsObserver){
             MiddlewareProxy.getInstance().setOnSmsChangedListener(tag,(ISmsObserver)mPresenter);
         }
+        mPresenter.refreshView();
     }
 
     @Override
@@ -89,5 +90,15 @@ public class SmsListFragment extends Fragment
     @Override
     public String getFragmentTitle() {
         return "信息";
+    }
+
+    @Override
+    public void onForeground() {
+        mPresenter.refreshView();
+    }
+
+    @Override
+    public void onBackground() {
+
     }
 }

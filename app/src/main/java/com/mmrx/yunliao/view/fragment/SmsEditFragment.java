@@ -46,4 +46,14 @@ public class SmsEditFragment extends Fragment
     public String getFragmentTitle() {
         return "姓名";
     }
+
+    @Override
+    public void onForeground() {
+
+    }
+
+    @Override
+    public void onBackground() {
+
+    }
 }

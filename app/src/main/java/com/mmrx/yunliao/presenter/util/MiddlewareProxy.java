@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,6 +48,8 @@ public class MiddlewareProxy implements IClean{
     private ExecutorService mCacheThreadPool;
 
     private SimpleDateFormat mSimpleDateFormat;//格式 "yyyy-MM-dd hh:mm:ss"
+
+    private boolean isInit = false;
     private MiddlewareProxy(){
         mDialogFactory = new CustomDialog();
         mSmsDBhelper = SmsDBhelper.getInstance();
@@ -72,8 +75,13 @@ public class MiddlewareProxy implements IClean{
         if(context == null)
             return;
         mGroupSmsDBhelper.initDB(context);
+        isInit = true;
     }
 
+
+    public boolean isInit(){
+        return isInit;
+    }
     /**
      * 添加sms监听
      * @param key
@@ -101,6 +109,17 @@ public class MiddlewareProxy implements IClean{
 
     public HashMap<String,ISmsObserver> getmSmsObserverMap(){
         return this.mSmsObserverMap;
+    }
+
+    public void notifyAllSmsObserver(int event){
+        HashMap<String,ISmsObserver> map = getmSmsObserverMap();
+        if(map != null && map.size() > 0){
+            for(Map.Entry<String,ISmsObserver> entry : map.entrySet()){
+                if(entry.getValue() != null){
+                    entry.getValue().onSmsNoticed(event);
+                }
+            }
+        }//end if
     }
 
     /**
@@ -269,6 +288,12 @@ public class MiddlewareProxy implements IClean{
         return listRes;
     }
 
+    /**
+     * 删除短信trhead
+     * @param context
+     * @param bean
+     * @return
+     */
     public boolean deleteSmsThread(Context context,ISmsListBean bean){
         boolean popUpDialog = false;
         if(bean instanceof SmsThreadBean){
@@ -287,6 +312,12 @@ public class MiddlewareProxy implements IClean{
         return !popUpDialog;
     }
 
+    /**
+     * 设置thread是否已读
+     * @param context
+     * @param bean
+     * @return
+     */
     public boolean setSmsThreadsRead(Context context,ISmsListBean bean){
         if(bean instanceof SmsThreadBean){
             return mSmsDBhelper.updateSmsThreadReadState(context,(SmsThreadBean)bean,true);
@@ -294,6 +325,26 @@ public class MiddlewareProxy implements IClean{
             return false;
         }
         return false;
+    }
+
+    public boolean deleteGroupSmsAll(){
+        return this.mGroupSmsDBhelper.deleteAll();
+    }
+
+    public synchronized void encodeSmsAll(Context context){
+        this.mSmsDBhelper.encodeSms(context);
+    }
+
+    public synchronized void decodeSmsAll(Context context){
+        this.mSmsDBhelper.decodeSms(context);
+    }
+
+    public synchronized void encodeGroupSmsAll(){
+        this.mGroupSmsDBhelper.encodeSms();
+    }
+
+    public synchronized void decodeGroupSmsAll(){
+        this.mGroupSmsDBhelper.decodeSms();
     }
 
 

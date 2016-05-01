@@ -92,6 +92,9 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
         }else{
             transaction.show(fragment);
         }
+        if(fragment instanceof IFragment){
+            ((IFragment) fragment).onForeground();
+        }
         transaction.commit();
         //通过show/hide来进行fragment的切换时,需要手动更新activity上的title
         setTitle((IFragment) fragment);
@@ -110,6 +113,9 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
         }else{
             transaction.replace(this.mContainerId,fragment,tag);
             transaction.addToBackStack(null);
+        }
+        if(fragment instanceof IFragment){
+            ((IFragment) fragment).onForeground();
         }
         transaction.commit();
         //通过replace进行fragment切换时,涉及到fragment生命周期方法的调用,
@@ -130,7 +136,10 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
         for(Map.Entry<String,Fragment> entry:this.mFragmentMap.entrySet()){
             //该fragment已经被添加到页面上
             if(hasFragmentByTag(entry.getKey())){
-                transaction.hide(entry.getValue());
+                Fragment fragment = entry.getValue();
+                if(fragment instanceof IFragment)
+                    ((IFragment) fragment).onBackground();
+                transaction.hide(fragment);
             }
         }
     }
