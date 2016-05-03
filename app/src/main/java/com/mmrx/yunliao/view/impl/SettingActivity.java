@@ -39,15 +39,16 @@ public class SettingActivity extends AbsActivity
         mFnotice = SettingFragment.newInstance(Constant.SP_SETTING_MAIN_NOTICE);
         mPresenter.putFragment(new String[]{
                         Constant.S_MAIN
-                        ,Constant.SP_SETTING_MAIN_CONTROL
-                        ,Constant.SP_SETTING_MAIN_NOTICE
-                        ,Constant.SP_SETTING_MAIN_PRIVATE},
-                mFmain,mFcontrol,mFnotice,mFprivate);
+                        , Constant.SP_SETTING_MAIN_CONTROL
+                        , Constant.SP_SETTING_MAIN_NOTICE
+                        , Constant.SP_SETTING_MAIN_PRIVATE},
+                mFmain, mFcontrol, mFnotice, mFprivate);
     }
 
     @Override
-    public void onFragmentChanged(String fragment, String fragmentType) {
-        mPresenter.fragmentSelection_replace(fragmentType,false);
+    public void onFragmentChanged(String fragment, Object obj) {
+        if(obj instanceof String)
+            mPresenter.fragmentSelection_replace((String)obj, false);
     }
 
     @Override
@@ -62,4 +63,5 @@ public class SettingActivity extends AbsActivity
 
         super.onBackPressed();
     }
+
 }

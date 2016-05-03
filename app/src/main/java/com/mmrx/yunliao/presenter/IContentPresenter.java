@@ -15,5 +15,5 @@ public interface IContentPresenter {
     /**
      * 刷新页面
      */
-    void refreshView();
+    void refreshView(Object object);
 }

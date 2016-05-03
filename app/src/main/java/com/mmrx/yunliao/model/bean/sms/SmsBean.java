@@ -75,7 +75,7 @@ public class SmsBean {
 
     public void setDate_long(long date_long) {
         this.date_long = date_long;
-        this.date_sent_str = MiddlewareProxy.getInstance().dateFormat(this.date_long);
+        this.date_str = MiddlewareProxy.getInstance().dateFormat(this.date_long);
     }
 
     public String getDate_str() {

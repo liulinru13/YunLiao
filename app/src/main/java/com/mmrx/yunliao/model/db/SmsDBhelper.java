@@ -10,6 +10,7 @@ import android.provider.Telephony;
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.model.bean.sms.SmsBean;
+import com.mmrx.yunliao.model.bean.sms.SmsThread;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.presenter.util.EncodeDecodeUtil;
 import com.mmrx.yunliao.presenter.util.L;
@@ -45,7 +46,7 @@ public class SmsDBhelper{
                 new String[]{"_id", "date", "message_count", "recipient_ids", "snippet", "read", "type"},
                 "type=0", null, null);
         //是否加密存储
-        boolean isEncode = SPUtil.getPreference(context).getBoolean(Constant.SP_SETTING_MAIN_ENCODE_SWITCH,false);
+        boolean isEncode = SPUtil.getPreference(context).getBoolean(Constant.SP_SETTING_MAIN_ENCODE_SWITCH, false);
         //是否加密显示
         boolean isEncodeShow = SPUtil.getPreference(context).getBoolean(Constant.SP_SETTING_MAIN_ENCODE_SHOW,false);
         if(cursor != null){
@@ -97,7 +98,7 @@ public class SmsDBhelper{
         if(resolver != null && !smsIsLocked(resolver,bean)) {
             context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL),
                     "thread_id=?", new String[]{bean.get_id() + ""});
-            context.getContentResolver().delete(Uri.withAppendedPath(Uri.parse(Constant.SMS_THREADS),bean.get_id() + ""),null,null);
+            context.getContentResolver().delete(Uri.withAppendedPath(Uri.parse(Constant.SMS_THREADS), bean.get_id() + ""), null, null);
             return true;
         }
         return false;
@@ -165,6 +166,35 @@ public class SmsDBhelper{
 //    }
 
     /**
+     * 将smsBean实体插入到数据库中
+     * @param context
+     * @param bean
+     * @param values
+     */
+    public synchronized void insertSmsToDb(Context context,SmsBean bean,ContentValues values){
+        if(values == null){
+            values = new ContentValues();
+        }
+        values.put("address",bean.getAddress());
+        values.put("body",bean.getBody());
+        values.put("date", bean.getDate_long());
+        values.put("locked",bean.getLocked());
+        values.put("status",bean.getStatus());
+        values.put("subject",bean.getSubject());
+        values.put("type",bean.getType());
+
+        context.getContentResolver().insert(Uri.parse(getUriByType(1)), values);
+    }
+
+    /**
+     * 清空短信数据库
+     * @param context
+     */
+    public synchronized boolean deleteAllSms(Context context){
+        return context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL), null, null)>0;
+    }
+
+    /**
      * 根据threadID获取全部sms会话记录,根据时间升序排序
      * @param context
      * @param threadBean
@@ -203,6 +233,26 @@ public class SmsDBhelper{
             }
         }
         return list;
+    }
+
+    /**
+     * 获取所有短信记录
+     * @param context
+     * @return
+     */
+    public List<SmsThread> getAllSmsRecord(Context context){
+        List<SmsThread> result = new ArrayList<SmsThread>();
+
+        List<ISmsListBean>  threads = queryAllSmsThreads(context);
+        for(ISmsListBean listBean : threads){
+            SmsThreadBean threadBean = (SmsThreadBean)listBean;
+
+            SmsThread thread = new SmsThread();
+            thread.setmThreasInfo(threadBean);
+            thread.setmSmsList(queryAllSmsByThreadId(context,threadBean));
+            result.add(thread);
+        }
+        return result;
     }
 
     /**

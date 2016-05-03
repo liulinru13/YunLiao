@@ -41,4 +41,6 @@ public interface ISmsListBean extends Comparable<ISmsListBean>{
      * @return
      */
     Class getClassType();
+
+    int get_id();
 }

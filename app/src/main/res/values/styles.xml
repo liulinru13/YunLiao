@@ -22,4 +22,11 @@
     <style name="nightTheme" parent="AppTheme">
 
     </style>
+
+    <style name="CustomizeStyle03">
+        <item name="imageScaleType">center</item>
+        <item name="image">@drawable/ic_launcher</item>
+        <item name="cborderWidth">0dp</item>
+        <item name="cborderColor">#ffffffff</item>
+    </style>
 </resources>

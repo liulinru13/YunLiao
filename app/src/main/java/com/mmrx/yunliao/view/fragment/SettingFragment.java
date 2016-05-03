@@ -426,12 +426,17 @@ public class SettingFragment extends PreferenceFragment
     }
 
     @Override
-    public void onForeground() {
+    public void onForeground(Object obj) {
 
     }
 
     @Override
-    public void onBackground() {
+    public void onBackground(Object obj) {
+
+    }
+
+    @Override
+    public void doSomething(Object... objs) {
 
     }
 }

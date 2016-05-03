@@ -4,6 +4,7 @@ package com.mmrx.yunliao.presenter.util;/**
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -14,6 +15,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.mmrx.yunliao.SmsReceiver.ISmsObserver;
 import com.mmrx.yunliao.model.bean.contacts.ContactsBean;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
+import com.mmrx.yunliao.model.bean.sms.SmsBean;
+import com.mmrx.yunliao.model.bean.sms.SmsThread;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.model.db.ContactsDBhelper;
 import com.mmrx.yunliao.model.db.GroupSmsDBhelper;
@@ -93,7 +96,7 @@ public class MiddlewareProxy implements IClean{
             this.mSmsObserverMap.put(key,observer);
         }
         else{
-            this.mSmsObserverMap.put(key,observer);
+            this.mSmsObserverMap.put(key, observer);
         }
     }
 
@@ -258,6 +261,14 @@ public class MiddlewareProxy implements IClean{
         return list;
     }
 
+    public List<SmsThread> getAllSms(Context context){
+        return mSmsDBhelper.getAllSmsRecord(context);
+    }
+
+    public List<SmsBean> queryAllSmsByThreadId(Context context,SmsThreadBean threadBean){
+        return mSmsDBhelper.queryAllSmsByThreadId(context,threadBean);
+    }
+
     /**
      * 获取所有的群发记录数组
      * @param context
@@ -331,6 +342,10 @@ public class MiddlewareProxy implements IClean{
         return this.mGroupSmsDBhelper.deleteAll();
     }
 
+    public boolean deleteSmsAll(Context context){
+        return this.mSmsDBhelper.deleteAllSms(context);
+    }
+
     public synchronized void encodeSmsAll(Context context){
         this.mSmsDBhelper.encodeSms(context);
     }
@@ -351,6 +366,61 @@ public class MiddlewareProxy implements IClean{
     /*===================联系人操作===================*/
     public List<ContactsBean> getAllContacts(Context context){
         return this.mContactsDBhelper.getAllContactsList(context);
+    }
+
+    /*===================备份与恢复操作===================*/
+
+    /**
+     * 备份短信文件
+     * @param context
+     */
+    public void backupSms(Context context){
+        String xml;
+        List<SmsThread> list = getAllSms(context);
+        XmlWritter xw = new XmlWritter();
+        xml = xw.getXmlFormatStringSms(list);
+        BackupFileMaker bfm = new BackupFileMaker(context,xml, BackupFileMaker.BackupType.SMS);
+        bfm.make();
+    }
+
+    /**
+     * 还原短信备份数据
+     * @param context
+     * @param list
+     */
+    public void recoverSms(Context context,List<SmsThread> list){
+        //清空短信数据库
+        mSmsDBhelper.deleteAllSms(context);
+        //插入数据
+        for(SmsThread smsThread : list){
+            List<SmsBean> smsBeanList = smsThread.getmSmsList();
+            ContentValues values = new ContentValues();
+            for(SmsBean bean:smsBeanList) {
+                values.clear();
+                mSmsDBhelper.insertSmsToDb(context, bean,values);
+            }
+        }
+    }
+
+    /**
+     * 备份联系人文件
+     * @param context
+     */
+    public void backupContacts(Context context){
+        String xml;
+        List<ContactsBean> list = getAllContacts(context);
+        XmlWritter xw = new XmlWritter();
+        xml = xw.getXmlFormatStringContacts(list);
+        BackupFileMaker bfm = new BackupFileMaker(context,xml, BackupFileMaker.BackupType.CON);
+        bfm.make();
+    }
+
+    public void recoverContacts(Context context,List<ContactsBean> list){
+        //清空联系人数据库
+        this.mContactsDBhelper.deleteAllContacts(context);
+        for(ContactsBean bean : list){
+            //to be continue
+        }
     }
 
 //    public

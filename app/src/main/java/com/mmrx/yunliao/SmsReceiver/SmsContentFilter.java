@@ -99,7 +99,7 @@ public class SmsContentFilter {
             @Override
             public void run() {
                 //清空系统短信数据库
-                context.getContentResolver().delete(Uri.parse(Constant.SMS_URI_ALL), null, null);
+                MiddlewareProxy.getInstance().deleteSmsAll(context);
                 //清空云聊数据库
                 MiddlewareProxy.getInstance().deleteGroupSmsAll();
                 Handler handler = new Handler(context.getMainLooper());

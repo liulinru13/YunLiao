@@ -10,6 +10,7 @@ public interface IFragment {
     void setFragmentListener(IFragmentListener listener);
     String getFragmentTag();
     String getFragmentTitle();
-    void onForeground();
-    void onBackground();
+    void onForeground(Object obj);
+    void onBackground(Object obj);
+    void doSomething(Object... objs);
 }

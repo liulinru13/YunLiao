@@ -8,15 +8,19 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.SmsReceiver.ISmsObserver;
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.EmptySmsListBean;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
+import com.mmrx.yunliao.model.bean.sms.SmsThread;
 import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.presenter.adapter.SmsListAdapter;
+import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+import com.mmrx.yunliao.view.fragment.IFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +34,6 @@ import butterknife.ButterKnife;
  * 描述: 负责短信列表页面展示管理的Presenter
  */
 public class SmsListPresenter implements IContentPresenter,
-        AdapterView.OnItemClickListener,
         SmsListAdapter.ISwipeButtonClickListener,
         ISmsObserver{
 
@@ -71,13 +74,13 @@ public class SmsListPresenter implements IContentPresenter,
         mAdapter = new SmsListAdapter(this.mSmsListFragment.getActivity(),mList,this);
         mListView = (SwipeListView)mView.findViewById(R.id.sms_list_fragment_list);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
+        mListView.setSwipeListViewListener(new SwipeListViewListener());
         //异步请求数据
         getData();
     }
 
     @Override
-    public void refreshView(){
+    public void refreshView(Object obj){
         getData();
     }
 
@@ -112,10 +115,6 @@ public class SmsListPresenter implements IContentPresenter,
         });
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 
     @Override
     public void onDeleteBnClicked(int position) {
@@ -143,6 +142,31 @@ public class SmsListPresenter implements IContentPresenter,
     public void onSmsNoticed(int event) {
         if(event == Constant.FLAG_SMS_NEW_RECEIVED || event == Constant.FLAT_SMS_REFRESH){
             getData();
+        }
+    }
+
+    class SwipeListViewListener extends BaseSwipeListViewListener {
+
+        @Override
+        public void onClickFrontView(int position) {
+            super.onClickFrontView(position);
+            L.i("DrugFragment--onClickFrontView");
+            ISmsListBean bean = mList.get(position);
+            if(!bean.isRead()){
+                onMarkBnClicked(position);
+            }
+            if(mSmsListFragment instanceof IFragment){
+                ((IFragment) mSmsListFragment).doSomething(bean);
+            }
+
+        }
+        @Override
+        public void onDismiss(int[] reverseSortedPositions) {
+            L.i("SwipeListViewListener-onDismiss");
+            for (int position : reverseSortedPositions) {
+//                d_list.remove(position);
+            }
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

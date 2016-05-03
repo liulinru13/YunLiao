@@ -6,4 +6,31 @@
     <!--字体颜色-->
     <attr name="custom_textcolor" format="reference|color"/>
 
+    <!-- 自定义属性-->
+    <attr name="titleText" format="string"/>
+    <attr name="titleColor" format="color"/>
+    <attr name="contentColor" format="color"/>
+    <attr name="contentText" format="string"/>
+    <attr name="titleSize" format="dimension"/>
+    <attr name="image" format="reference"/>
+    <attr name="imageScaleType">
+        <enum name="fillXY" value="0"/>
+        <enum name="center" value="1"/>
+    </attr>
+    <!--边框宽度-->
+    <attr name="cborderWidth" format="dimension"/>
+    <!--边框颜色-->
+    <attr name="cborderColor" format="color"/>
+    <!--边框角度-->
+    <attr name="cborderAngle" format="float"/>
+
+    <attr name="CustomImageView03Style" format="reference"/>
+
+    <declare-styleable name="CustomRoundImageView">
+        <attr name="image"/>
+        <attr name="cborderWidth"/>
+        <attr name="cborderColor"/>
+        <attr name="imageScaleType"/>
+    </declare-styleable>
+
 </resources>

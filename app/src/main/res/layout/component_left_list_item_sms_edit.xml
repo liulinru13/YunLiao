@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    xmlns:customview="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/custom_sms_edit_item_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="2016年05月03日10:32:43"
+        android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/custom_sms_edit_item_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_launcher"
+        android:layout_below="@id/custom_sms_edit_item_date"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="50dp"
+        android:layout_toRightOf="@id/custom_sms_edit_item_icon"
+        android:layout_below="@id/custom_sms_edit_item_date">
+
+        <!--
+        <com.mmrx.yunliao.view.component.CustomRoundImageView
+            android:id="@+id/custom_sms_edit_item_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            customview:borderWidth="2dp"
+            customview:borderColor="#ff868686"
+            customview:image="@drawable/ic_launcher"
+            />
+
+        <TextView
+            android:id="@+id/custom_sms_edit_item_name"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custom_sms_edit_item_icon"
+            android:gravity="center"
+            android:text="name" />-->
+
+        <TextView
+            android:id="@+id/custom_sms_edit_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="contentcontencontentcontensadfjadfadfadfadcontentcontensadfjadfadfadfadsadfjadfadfadfadfadf"
+            android:background="#1234"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/custom_sms_edit_item_content_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/custom_sms_edit_item_content"
+            android:text="status"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

@@ -48,4 +48,19 @@ public class BackUpFragment extends Fragment
     public String getFragmentTitle() {
         return "备份";
     }
+
+    @Override
+    public void onForeground(Object obj) {
+
+    }
+
+    @Override
+    public void onBackground(Object obj) {
+
+    }
+
+    @Override
+    public void doSomething(Object... objs) {
+
+    }
 }

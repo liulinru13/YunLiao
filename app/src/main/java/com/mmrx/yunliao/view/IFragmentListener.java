@@ -8,9 +8,9 @@ public interface IFragmentListener {
     /**
      * Fragment的回调方法,用于通知上层,切换页面
      * @param fragment fragment类型
-     * @param fragmentType 具体页面,可以为null,setting页面中使用到了
+     * @param obj 参数 具体页面,可以为null,setting页面中使用到了
      */
-    void onFragmentChanged(String fragment,String fragmentType);
+    void onFragmentChanged(String fragment,Object obj);
 
     /**
      * 通知上层,变更标题

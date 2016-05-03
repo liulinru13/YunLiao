@@ -75,9 +75,10 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
 
     /**
      * 通过隐藏所有fragment,显示其中一个的方式来进行Fragment的切换
-     * @param tag fragment的tag
+     * @param tag
+     * @param obj 显示前需要做的操作的参数
      */
-    public void fragmentSelection_show_hide(String tag){
+    public void fragmentSelection_show_hide(String tag,Object obj){
 
         //保证相同的fragment不会多次出现在栈顶
         if(mFragmentStack.isEmpty() || !mFragmentStack.peek().equals(tag))
@@ -93,13 +94,16 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
             transaction.show(fragment);
         }
         if(fragment instanceof IFragment){
-            ((IFragment) fragment).onForeground();
+            ((IFragment) fragment).onForeground(obj);
         }
         transaction.commit();
         //通过show/hide来进行fragment的切换时,需要手动更新activity上的title
         setTitle((IFragment) fragment);
         listener.onFragmentChanged(tag,null);
     }
+
+
+
     /**
      * 通过replace的方式来进行Fragment的切换
      * @param tag fragment的tag
@@ -115,7 +119,7 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
             transaction.addToBackStack(null);
         }
         if(fragment instanceof IFragment){
-            ((IFragment) fragment).onForeground();
+            ((IFragment) fragment).onForeground(null);
         }
         transaction.commit();
         //通过replace进行fragment切换时,涉及到fragment生命周期方法的调用,
@@ -138,7 +142,7 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
             if(hasFragmentByTag(entry.getKey())){
                 Fragment fragment = entry.getValue();
                 if(fragment instanceof IFragment)
-                    ((IFragment) fragment).onBackground();
+                    ((IFragment) fragment).onBackground(null);
                 transaction.hide(fragment);
             }
         }
@@ -168,8 +172,8 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
     }
 
     @Override
-    public void onFragmentChanged(String fragment, String fragmentType) {
-        this.listener.onFragmentChanged(fragment,fragmentType);
+    public void onFragmentChanged(String fragment, Object obj) {
+        this.listener.onFragmentChanged(fragment,obj);
     }
 
     @Override
@@ -187,7 +191,7 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
         //针对hide-show的回退方式,使用自定义的回退栈
         String tag = null;
         if((tag = getLastFragmentTag())!= null){
-            fragmentSelection_show_hide(tag);
+            fragmentSelection_show_hide(tag,null);
             return true;
         }
         //针对replace的方式,使用自带的回退栈

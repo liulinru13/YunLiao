@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * 显示短信列表的fragment
  */
 public class SmsListFragment extends Fragment
-    implements IFragment,AdapterView.OnItemClickListener {
+    implements IFragment{
 
     private final String tag = "sms_list_fragment";
     private IContentPresenter mPresenter;
@@ -59,9 +59,9 @@ public class SmsListFragment extends Fragment
     public void onStart() {
         super.onStart();
         if(mPresenter instanceof ISmsObserver){
-            MiddlewareProxy.getInstance().setOnSmsChangedListener(tag,(ISmsObserver)mPresenter);
+            MiddlewareProxy.getInstance().setOnSmsChangedListener(tag, (ISmsObserver) mPresenter);
         }
-        mPresenter.refreshView();
+        mPresenter.refreshView(null);
     }
 
     @Override
@@ -70,11 +70,6 @@ public class SmsListFragment extends Fragment
         if(mPresenter instanceof ISmsObserver){
             MiddlewareProxy.getInstance().removeSmsChangedListener(tag);
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     @Override
@@ -93,12 +88,21 @@ public class SmsListFragment extends Fragment
     }
 
     @Override
-    public void onForeground() {
-        mPresenter.refreshView();
+    public void onForeground(Object obj) {
+        if(mPresenter != null)
+            mPresenter.refreshView(null);
     }
 
     @Override
-    public void onBackground() {
+    public void onBackground(Object obj) {
 
+    }
+
+    @Override
+    public void doSomething(Object... objs) {
+        if(objs != null){
+            ISmsListBean bean = (ISmsListBean)objs[0];
+            mListener.onFragmentChanged(tag,bean);
+        }
     }
 }

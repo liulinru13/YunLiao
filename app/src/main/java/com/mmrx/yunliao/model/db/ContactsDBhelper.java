@@ -127,5 +127,9 @@ public class ContactsDBhelper {
         return list;
     }
 
+    public boolean deleteAllContacts(Context context){
+        return context.getContentResolver().delete(CONTACT_URL,null,null)>0;
+    }
+
 
 }

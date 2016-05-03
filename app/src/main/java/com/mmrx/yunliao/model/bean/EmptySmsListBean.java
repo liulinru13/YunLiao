@@ -42,4 +42,9 @@ public class EmptySmsListBean implements ISmsListBean{
     public int compareTo(ISmsListBean another) {
         return 0;
     }
+
+    @Override
+    public int get_id() {
+        return 0;
+    }
 }

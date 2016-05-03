@@ -6,10 +6,44 @@
     tools:context="com.mmrx.yunliao.view.fragment.SmsEditFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="短信编辑fragment"
-        android:textSize="40dp"/>
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/sms_edit_edit_layout"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/sms_edit_edit_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="发送"
+                android:layout_alignParentRight="true"/>
+
+            <EditText
+                android:id="@+id/sms_edit_edit_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/sms_edit_edit_send"
+                android:background="#1234"
+                android:hint="短信"
+                android:textColorHint="#5234"/>
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/sms_edit_list_view"
+            android:layout_above="@id/sms_edit_edit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+
 
 </FrameLayout>

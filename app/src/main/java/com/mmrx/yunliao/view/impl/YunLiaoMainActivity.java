@@ -13,13 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.model.bean.group.SmsGroupThread;
+import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
+import com.mmrx.yunliao.model.bean.sms.SmsThread;
+import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.presenter.FragmentPresenter;
+import com.mmrx.yunliao.presenter.util.BackupFileMaker;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+import com.mmrx.yunliao.presenter.util.XmlWritter;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
 import com.mmrx.yunliao.view.fragment.BackUpFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
+
+import java.util.List;
 
 
 public class YunLiaoMainActivity extends AbsActivity
@@ -55,7 +63,7 @@ public class YunLiaoMainActivity extends AbsActivity
         navigationView.setNavigationItemSelectedListener(this);
         //显示短信列表页面
         mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment);
-        mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag());
+        mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag(),null);
     }
 
     @Override
@@ -75,7 +83,7 @@ public class YunLiaoMainActivity extends AbsActivity
 //                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();null
 //                setFragmentSelection(Constant.EDIT,null);
-                mPresenter.fragmentSelection_show_hide(mEditFragment.getFragmentTag());
+                mPresenter.fragmentSelection_show_hide(mEditFragment.getFragmentTag(),null);
                 mFloatBn.setVisibility(View.GONE);
                 break;
             default:
@@ -140,7 +148,7 @@ public class YunLiaoMainActivity extends AbsActivity
         //备份
         if (id == R.id.nav_back_up) {
             mDrawer.closeDrawer(GravityCompat.START);
-            mPresenter.fragmentSelection_show_hide(mBackUpFragment.getFragmentTag());
+            mPresenter.fragmentSelection_show_hide(mBackUpFragment.getFragmentTag(),null);
         }
         //设置
         else if (id == R.id.nav_setting) {
@@ -162,12 +170,29 @@ public class YunLiaoMainActivity extends AbsActivity
     }
 
     @Override
-    public void onFragmentChanged(String fragment, String fragmentType) {
-//        setFragmentSelection(fragment,fragmentType);
-        if(fragment.equals(mListFragment.getFragmentTag()))
+    public void onFragmentChanged(String fragment, Object obj) {
+        if(fragment.equals(mListFragment.getFragmentTag())) {
             mFloatBn.setVisibility(View.VISIBLE);
-        else
+            //点击列表的事件
+            if(obj != null){
+//                Object param = null;
+//                if(obj instanceof SmsThreadBean){
+//                    SmsThread bean = new SmsThread();
+//                    bean.setmThreasInfo((SmsThreadBean)obj);
+//                    param = bean;
+//                }else if(obj instanceof SmsGroupThreadsBean){
+//                    SmsGroupThread bean = new SmsGroupThread();
+//                    bean.setmGroupInfo((SmsGroupThreadsBean)obj);
+//                    param = bean;
+//                }
+                mPresenter.fragmentSelection_show_hide(mEditFragment.getFragmentTag(),obj);
+            }
+        }
+        else {
             mFloatBn.setVisibility(View.GONE);
+        }
+
+
     }
 
     @Override
