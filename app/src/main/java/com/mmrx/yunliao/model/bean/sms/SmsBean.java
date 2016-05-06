@@ -21,7 +21,7 @@ public class SmsBean {
     private long     date_sent_long;//发送日期,long型
     private String   date_sent_str;//发送日期,格式
     private boolean   read;//是否阅读,0未读,1已读,这里用boolean来表示
-    private int     status;//短信状态,-1接收,0 complete,64 pending
+    private int     status;//短信状态,-1接收,0 complete,64 pending 32
     private String   subject;//题目
     /*type
         ALL    = 0;

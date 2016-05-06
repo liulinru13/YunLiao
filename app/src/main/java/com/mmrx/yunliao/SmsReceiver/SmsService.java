@@ -24,6 +24,10 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.mmrx.yunliao.model.Constant;
+import com.mmrx.yunliao.model.exception.MmsException;
+import com.mmrx.yunliao.presenter.smsSend.MessageUtils;
+import com.mmrx.yunliao.presenter.smsSend.SmsMessageSender;
+import com.mmrx.yunliao.presenter.smsSend.SmsSingleRecipientSender;
 import com.mmrx.yunliao.presenter.util.EncodeDecodeUtil;
 import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
@@ -41,10 +45,10 @@ public class SmsService extends Service {
     private static final String TAG = "SmsServiceLog";
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String SMS_DELEVERED = "android.provider.Telephony.SMS_DELIVER";
-    public static final String ACTION_SEND_MESSAGE = "com.android.mms.transaction.SEND_MESSAGE";
-    public static final String ACTION_SERVICE_STATE_CHANGED = "android.intent.action.SERVICE_STATE";
+    public static final String ACTION_SEND_MESSAGE = "com.mmrx.yunliao.SmsReceiver.SEND_MESSAGE";
+    public static final String ACTION_SERVICE_STATE_CHANGED = "com.mmrx.yunliao.SmsReceiver.SERVICE_STATE";
     public static final String EXTRA_MESSAGE_SENT_SEND_NEXT ="SendNextMsg";
-
+    public static final String MESSAGE_SENT_ACTION = "com.mmrx.yunliao.SmsReceiver.MESSAGE_SENT_ACTION";
     private ServiceHandler mServiceHandler;
     public Handler mToastHandler = new Handler();
     private Looper mServiceLooper;
@@ -194,7 +198,7 @@ public class SmsService extends Service {
 //            if (LogTag.DEBUG_SEND || Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
 //                Log.v(TAG, "handleSmsSent move message to sent folder uri: " + uri);
 //            }
-            if (!moveMessageToFolder(getApplicationContext(), uri, 2, error)) {//type 2 sent
+            if (!MessageUtils.moveMessageToFolder(getApplicationContext(), uri, 2, error)) {//type 2 sent
 //                Log.e(TAG, "handleSmsSent: failed to move message " + uri + " to sent folder");
             }
             if (sendNextMsg) {
@@ -213,7 +217,7 @@ public class SmsService extends Service {
             // queued up messages.
             registerForServiceStateChanges();
             // We couldn't send the message, put in the queue to retry later.
-            moveMessageToFolder(this, uri, 6, error);//Sms.MESSAGE_TYPE_QUEUED
+            MessageUtils.moveMessageToFolder(this, uri, 6, error);//Sms.MESSAGE_TYPE_QUEUED
             mToastHandler.post(new Runnable() {
                 public void run() {
                     Toast.makeText(SmsService.this,"Currently can\\'t send your message. It will be sent when the service becomes available.",
@@ -241,7 +245,7 @@ public class SmsService extends Service {
 //        if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE) || LogTag.DEBUG_SEND) {
 //            Log.v(TAG, "messageFailedToSend msg failed uri: " + uri + " error: " + error);
 //        }
-        moveMessageToFolder(this, uri, 5, error);//Sms.MESSAGE_TYPE_FAILED
+        MessageUtils.moveMessageToFolder(this, uri, 5, error);//Sms.MESSAGE_TYPE_FAILED
 //        MessagingNotification.notifySendFailed(getApplicationContext(), true);
     }
 
@@ -262,10 +266,10 @@ public class SmsService extends Service {
 
 //        if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE) || LogTag.DEBUG_SEND) {
             SmsMessage sms = msgs[0];
-            L.v(TAG, "handleSmsReceived" + (sms.isReplace() ? "(replace)" : "") +
-                    " messageUri: " + messageUri +
-                    ", address: " + sms.getOriginatingAddress() +
-                    ", body: " + sms.getMessageBody());
+        L.v(TAG, "handleSmsReceived" + (sms.isReplace() ? "(replace)" : "") +
+                " messageUri: " + messageUri +
+                ", address: " + sms.getOriginatingAddress() +
+                ", body: " + sms.getMessageBody());
 //        }
 
         if (messageUri != null) {
@@ -347,34 +351,25 @@ public class SmsService extends Service {
                     int msgId = c.getInt(SEND_COLUMN_ID);
                     Uri msgUri = ContentUris.withAppendedId(Uri.parse(Constant.SMS_URI_ALL), msgId);
 
-//                    SmsMessageSender sender = new SmsSingleRecipientSender(this,
-//                            address, msgText, threadId, status == Sms.STATUS_PENDING,
-//                            msgUri);
+                    SmsMessageSender sender = new SmsSingleRecipientSender(this,
+                            address, msgText, threadId, status == Sms.STATUS_PENDING,
+                            msgUri);
 
-//                    if (LogTag.DEBUG_SEND ||
-//                            LogTag.VERBOSE ||
-//                            Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
-//                        Log.v(TAG, "sendFirstQueuedMessage " + msgUri +
-//                                ", address: " + address +
-//                                ", threadId: " + threadId);
-//                    }
-
-//                    try {
-////                        sender.sendMessage(SendingProgressTokenManager.NO_TOKEN);;
-//                        mSending = true;
-//                    } catch (MmsException e) {
-//                        L.e(TAG, "sendFirstQueuedMessage: failed to send message " + msgUri
-//                                + ", caught ", e);
-//                        mSending = false;
-//                        messageFailedToSend(msgUri, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
-//                        success = false;
-//                        // Sending current message fails. Try to send more pending messages
-//                        // if there is any.
-//                        sendBroadcast(new Intent(SmsReceiverService.ACTION_SEND_MESSAGE,
-//                                null,
-//                                this,
-//                                SmsReceiver.class));
-//                    }
+                    try {
+                        sender.sendMessage(-1l);;
+                        mSending = true;
+                    } catch (MmsException e) {
+                        e.printStackTrace();
+                        mSending = false;
+                        messageFailedToSend(msgUri, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
+                        success = false;
+                        // Sending current message fails. Try to send more pending messages
+                        // if there is any.
+                        sendBroadcast(new Intent(SmsService.ACTION_SEND_MESSAGE,
+                                null,
+                                this,
+                                SmsReceiver.class));
+                    }
                 }
             } finally {
                 c.close();
@@ -570,7 +565,7 @@ public class SmsService extends Service {
 
         if (((threadId == null) || (threadId == 0)) && (address != null)) {
 //            threadId = Conversation.getOrCreateThreadId(context, address);
-            threadId = getOrCreateThreadId(context, address);
+            threadId = MessageUtils.getOrCreateThreadId(context, address);
             values.put(Sms.THREAD_ID, threadId);
         }
 
@@ -585,40 +580,7 @@ public class SmsService extends Service {
         return insertedUri;
     }
 
-    /**
-     * 通过联系人电话号码.来获取或者新建一个threadId返回
-     * @param context
-     * @param recipient
-     * @return
-     */
-    private long getOrCreateThreadId(
-            Context context, String recipient) {
-        Uri.Builder uriBuilder = Uri.parse("content://mms-sms/threadID").buildUpon();
 
-
-        uriBuilder.appendQueryParameter("recipient", recipient);
-
-        Uri uri = uriBuilder.build();
-        //if (DEBUG) Rlog.v(TAG, "getOrCreateThreadId uri: " + uri);
-
-//        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
-//                uri, ID_PROJECTION, null, null, null);
-        Cursor cursor = context.getContentResolver().query(uri,new String[]{"_id"},null,null,null);
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    return cursor.getLong(0);
-                } else {
-                    L.e(TAG, "getOrCreateThreadId returned no rows!");
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        L.e(TAG, "getOrCreateThreadId failed with " + recipient + " recipients");
-        throw new IllegalArgumentException("Unable to find or allocate a thread ID.");
-    }
 
     /**
      * 从intent中获取所有的短信信息,封装到SmsMessage数组中返回
@@ -643,40 +605,7 @@ public class SmsService extends Service {
         return msgs;
     }
 
-    public boolean moveMessageToFolder(Context context, Uri uri, int folder, int error) {
-        if (uri == null) {
-            return false;
-        }
 
-        boolean markAsUnread = false;
-        boolean markAsRead = false;
-        switch(folder) {
-            case 1://inbox
-            case 3://draft
-                break;
-            case 4://outbox
-            case 2://sent
-                markAsRead = true;
-                break;
-            case 5://failed
-            case 6://queued
-                markAsUnread = true;
-                break;
-            default:
-                return false;
-        }
-
-        ContentValues values = new ContentValues(3);
-
-        values.put("type", folder);
-        if (markAsUnread) {
-            values.put("read", 0);
-        } else if (markAsRead) {
-            values.put("read", 1);
-        }
-        values.put("error_code", error);
-        return 1 == getContentResolver().update(uri, values,null,null);
-    }
 
     private void registerForServiceStateChanges() {
         Context context = getApplicationContext();

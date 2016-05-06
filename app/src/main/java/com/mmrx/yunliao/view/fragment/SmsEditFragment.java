@@ -105,13 +105,18 @@ public class SmsEditFragment extends Fragment
                 smsGroupThread = null;
                 if(mPresenter != null)
                     mPresenter.refreshView(smsThread);
+                return;
             }else if(obj instanceof SmsGroupThreadsBean){
                 SmsGroupThread bean = new SmsGroupThread();
                 bean.setmGroupInfo((SmsGroupThreadsBean)obj);
                 smsThread = null;
                 smsGroupThread = bean;
+                return;
             }
         }
+        smsThread = null;
+        smsGroupThread = null;
+        mPresenter.refreshView(obj);
     }
 
 

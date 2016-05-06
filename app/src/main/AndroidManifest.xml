@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mmrx.yunliao" >
 
     <!-- 短信的相关权限 -->
@@ -38,7 +39,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup" >
         <activity
             android:name=".view.impl.LoadingActivity"
             android:label="@string/app_name"
@@ -53,6 +55,7 @@
             android:name=".view.impl.YunLiaoMainActivity"
             android:label="@string/title_activity_yun_liao_main"
             android:launchMode="singleTask"
+            android:hardwareAccelerated="false"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -121,17 +124,37 @@
             android:exported="true"
             android:process=":push" >
         </receiver>
-
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="35da90e1e806d181503fba2fc579ee84" />
-
+        <!-- 负责获取地理位置的service -->
         <service
             android:name=".SmsReceiver.LocationService"
             android:enabled="true"
             android:exported="false" >
         </service>
-        <service android:name="com.amap.api.location.APSService"></service>
+        <!-- 高德api需要设置的service -->
+        <service android:name="com.amap.api.location.APSService" />
+
+        <!-- 布局自动匹配,默认屏幕尺寸设置 -->
+        <meta-data
+            android:name="design_width"
+            android:value="1080" />
+        <meta-data
+            android:name="design_height"
+            android:value="1920" />
+        <!-- 高德地图的app key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="35da90e1e806d181503fba2fc579ee84" />
+
+        <receiver
+            android:name=".SmsReceiver.MessageStatusReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".SmsReceiver.MessageStatusService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

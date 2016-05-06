@@ -73,22 +73,10 @@ public class SmsEditAdapter extends BaseAdapter {
         SmsBean bean = mList.get(position);
         if(convertView == null){
             View view = null;
-            //收件
-            if(bean.getType() == 1){
-                view = LayoutInflater.from(mContext).inflate(leftId,null);
-            }
-            //发件 发送失败
-            else if(bean.getType() == 4 || bean.getType() == 5){
-                view = LayoutInflater.from(mContext).inflate(rightId,null);
-            }
-
+            vh = new ViewHolder();
+            view = getConvertView(bean.getType(),vh);
             if(view != null){
-                vh = new ViewHolder();
-                vh.date = (TextView)view.findViewById(R.id.custom_sms_edit_item_date);
-                vh.content = (TextView)view.findViewById(R.id.custom_sms_edit_item_content);
-                vh.select = (ImageView)view.findViewById(R.id.custom_sms_edit_item_icon);
-                vh.status = (TextView)view.findViewById(R.id.custom_sms_edit_item_content_status);
-
+                getViewHolder(view,vh);
                 convertView = view;
                 convertView.setTag(vh);
             }else {
@@ -97,6 +85,12 @@ public class SmsEditAdapter extends BaseAdapter {
         }
         else{
             vh = (ViewHolder)convertView.getTag();
+            if(getItemType(bean) != vh.type){
+                vh = new ViewHolder();
+                convertView = getConvertView(bean.getType(),vh);
+                getViewHolder(convertView,vh);
+                convertView.setTag(vh);
+            }
         }
         //收件
         if(bean.getType() == 1) {
@@ -158,6 +152,48 @@ public class SmsEditAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private View getConvertView(int type,ViewHolder vh){
+        View view = null;
+        if(type == 1){
+            view = LayoutInflater.from(mContext).inflate(leftId,null);
+            vh.type = 1;
+        }
+        //发件 发送失败
+        else if(type == 4 || type == 5){
+            view = LayoutInflater.from(mContext).inflate(rightId,null);
+            vh.type = 2;
+        }
+
+        return view;
+    }
+
+    private int getItemType(SmsBean bean){
+        if(bean.getType() ==1)
+            return 1;
+        else
+            return 2;
+    }
+
+    private void getViewHolder(View view,ViewHolder vh){
+        vh.date = (TextView)view.findViewById(R.id.custom_sms_edit_item_date);
+        vh.content = (TextView)view.findViewById(R.id.custom_sms_edit_item_content);
+        vh.select = (ImageView)view.findViewById(R.id.custom_sms_edit_item_icon);
+        vh.status = (TextView)view.findViewById(R.id.custom_sms_edit_item_content_status);
+    }
+
+//    @Override
+//    public int getViewTypeCount() {
+//        return 2;
+//    }
+//
+//    @Override
+//    public int getItemViewType(int position) {
+//        if (mList.get(position).getType() == 1)
+//            return 1;
+//        else
+//            return 2;
+//    }
+
     public boolean isIconShow() {
         return iconShow;
     }
@@ -176,6 +212,7 @@ public class SmsEditAdapter extends BaseAdapter {
         ImageView select;
         TextView content;
         TextView status;
+        int type;//1 是左 2 是右
     }
 
     static class SelectTag{

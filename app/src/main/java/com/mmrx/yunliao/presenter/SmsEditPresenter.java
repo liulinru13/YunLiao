@@ -16,6 +16,8 @@ import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.sms.SmsBean;
 import com.mmrx.yunliao.model.bean.sms.SmsThread;
 import com.mmrx.yunliao.presenter.adapter.SmsEditAdapter;
+import com.mmrx.yunliao.presenter.smsSend.MessageUtils;
+import com.mmrx.yunliao.presenter.smsSend.WorkingMessage;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 
 import java.util.ArrayList;
@@ -65,6 +67,14 @@ public class SmsEditPresenter implements IContentPresenter,
         mEditText = (EditText)mView.findViewById(R.id.sms_edit_edit_view);
         mSendBn = (Button)mView.findViewById(R.id.sms_edit_edit_send);
 
+        mSendBn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WorkingMessage wm = new WorkingMessage(mSmsEditFragment.getActivity());
+                wm.sendSmsWorker("hello",new String[]{"5554"}, MessageUtils.getOrCreateThreadId(mSmsEditFragment.getActivity(),"5554"));
+            }
+        });
+
         mList = new ArrayList<SmsBean>();
 
         mAdapter = new SmsEditAdapter(mSmsEditFragment.getActivity(),mList);
@@ -78,7 +88,7 @@ public class SmsEditPresenter implements IContentPresenter,
             public void run() {
 //                thread.getmThreasInfo()
                 thread.setmSmsList(MiddlewareProxy.getInstance().queryAllSmsByThreadId(mSmsEditFragment.getActivity(), thread.getmThreasInfo()));
-                mList.clear();
+
                 mList.addAll(thread.getmSmsList());
                 Message msg = new Message();
                 msg.what = REFRESH_PAGE;
@@ -89,6 +99,8 @@ public class SmsEditPresenter implements IContentPresenter,
 
     @Override
     public void refreshView(Object obj) {
+        mList.clear();
+        mAdapter.notifyDataSetChanged();
         if(obj != null){
             if(obj instanceof SmsThread){
                 thread = (SmsThread)obj;
