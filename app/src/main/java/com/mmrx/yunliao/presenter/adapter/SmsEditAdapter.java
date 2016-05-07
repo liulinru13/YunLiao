@@ -3,7 +3,9 @@ package com.mmrx.yunliao.presenter.adapter;/**
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,21 +94,6 @@ public class SmsEditAdapter extends BaseAdapter {
                 convertView.setTag(vh);
             }
         }
-        //收件
-        if(bean.getType() == 1) {
-            vh.date.setText(bean.getDate_str());
-            vh.content.setBackgroundColor(Color.GRAY);
-        }
-        //发件
-        else{
-            vh.date.setText(bean.getDate_sent_str());
-            if(bean.getType() == 4)//正常发送
-                vh.content.setBackgroundColor(Color.parseColor("#03de69"));
-            else if(bean.getType() == 5)//发送失败的
-                vh.content.setBackgroundColor(Color.RED);
-        }
-        //填充内容
-        vh.content.setText(bean.getBody());
         //填充状态
         if(bean.getLocked() == 1){
             vh.status.setVisibility(View.VISIBLE);
@@ -114,6 +101,40 @@ public class SmsEditAdapter extends BaseAdapter {
         }else{
             vh.status.setVisibility(View.GONE);
         }
+        //收件
+        if(bean.getType() == 1) {
+            vh.date.setText(bean.getDate_str());
+            try{
+
+                vh.content.setBackground(new BitmapDrawable(Glide.with(mContext).load(R.drawable.sms_edit_dialog_left).asBitmap().into(50, 50).get()));
+            }catch (Exception e){
+                e.printStackTrace();
+                vh.content.setBackground(mContext.getResources().getDrawable(R.drawable.sms_edit_dialog_left));
+            }
+
+        }
+        //发件
+        else{
+            vh.date.setText(bean.getDate_sent_str());
+//            if(bean.getType() == 4)//正常发送
+//                vh.content.setBackgroundColor(Color.parseColor("#03de69"));
+//            else if(bean.getType() == 5)//发送失败的
+//                vh.content.setBackgroundColor(Color.RED);
+
+            try{
+
+                vh.content.setBackground(new BitmapDrawable(Glide.with(mContext).load(R.drawable.sms_edit_dialog_right).asBitmap().into(50, 50).get()));
+            }catch (Exception e){
+                e.printStackTrace();
+                vh.content.setBackground(mContext.getResources().getDrawable(R.drawable.sms_edit_dialog_right));
+            }
+            if(bean.getType() == 5) {//发送失败的
+                vh.status.setText("发送失败");
+                vh.status.setVisibility(View.VISIBLE);
+            }
+        }
+        //填充内容
+        vh.content.setText(bean.getBody());
 
         //初始化为未选中状态
         vh.select.setTag(new SelectTag(bean.get_id(),false));

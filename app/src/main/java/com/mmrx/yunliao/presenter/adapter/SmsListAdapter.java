@@ -77,7 +77,7 @@ public class SmsListAdapter extends BaseAdapter{
         vh.content.setText(bean.getSnippet());
         vh.date.setText(bean.getDate());
 
-        vh.unread.setVisibility(bean.isRead() ? View.GONE : View.VISIBLE);
+//        vh.unread.setVisibility(bean.isRead() ? View.GONE : View.VISIBLE);
         vh.mark.setClickable(!bean.isRead());
 
         vh.mark.setTag(position);
@@ -116,8 +116,8 @@ public class SmsListAdapter extends BaseAdapter{
         TextView mark;
         @Bind(R.id.sms_item_delete)
         TextView delete;
-        @Bind(R.id.sms_itme_unread_icon)
-        ImageView unread;
+//        @Bind(R.id.sms_itme_unread_icon)
+//        ImageView unread;
 
         public ViewHolder(View view){
             ButterKnife.bind(this,view);

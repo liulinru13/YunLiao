@@ -39,12 +39,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/dayTheme"
         tools:replace="android:allowBackup" >
         <activity
             android:name=".view.impl.LoadingActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,7 +55,7 @@
             android:label="@string/title_activity_yun_liao_main"
             android:launchMode="singleTask"
             android:hardwareAccelerated="false"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/dayTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />

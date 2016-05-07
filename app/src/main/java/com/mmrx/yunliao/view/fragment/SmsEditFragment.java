@@ -116,7 +116,8 @@ public class SmsEditFragment extends Fragment
         }
         smsThread = null;
         smsGroupThread = null;
-        mPresenter.refreshView(obj);
+        if(mPresenter != null)
+            mPresenter.refreshView(obj);
     }
 
 

@@ -5,6 +5,18 @@
     <attr name="custom_background" format="reference|color"/>
     <!--字体颜色-->
     <attr name="custom_textcolor" format="reference|color"/>
+    <!--按钮背景颜色-->
+    <attr name="custom_bn_background" format="reference|color"/>
+    <attr name="custom_bn_background_pressed" format="reference|color"/>
+    <!--sms list item-->
+    <attr name="custom_bn_sms_list_item_back_mark_background" format="color"/>
+    <attr name="custom_bn_sms_list_item_back_delete_background" format="color"/>
+    <attr name="custom_bn_sms_list_item_back_text_color" format="reference|color"/>
+
+    <attr name="custom_sms_list_item_text_color" format="reference|color"/>
+    <attr name="custom_sms_list_item_1px_color" format="color"/>
+
+    <attr name="custom_sms_list_item_select_bn_color" format="color"/>
 
     <!-- 自定义属性-->
     <attr name="titleText" format="string"/>

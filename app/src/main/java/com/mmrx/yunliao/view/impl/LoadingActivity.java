@@ -9,12 +9,17 @@ import android.os.Message;
 import android.provider.Telephony;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.presenter.util.CustomDialog;
 import com.mmrx.yunliao.presenter.util.L;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.view.AbsActivity;
+
+import net.frakbot.jumpingbeans.JumpingBeans;
+
+import org.w3c.dom.Text;
 
 public class LoadingActivity extends AbsActivity {
     private final String TAG = "mainActivity";
@@ -35,17 +40,8 @@ public class LoadingActivity extends AbsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
+        TextView tv = (TextView)findViewById(R.id.load_tv);
+        JumpingBeans.with(tv).appendJumpingDots().build();
     }
 
     @TargetApi(19)
