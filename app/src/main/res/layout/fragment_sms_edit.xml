@@ -1,4 +1,4 @@
-<FrameLayout
+<com.zhy.autolayout.AutoFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,43 +7,54 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <RelativeLayout
+    <com.zhy.autolayout.AutoRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <com.zhy.autolayout.AutoRelativeLayout
             android:id="@+id/sms_edit_edit_layout"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:padding="10dp">
+            android:layout_height="200px"
+            android:paddingLeft="40px"
+            android:paddingRight="40px">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_alignParentTop="true"
+                android:background="?attr/custom_sms_list_item_1px_color"/>
 
             <Button
                 android:id="@+id/sms_edit_edit_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200px"
+                android:layout_height="150px"
                 android:layout_centerVertical="true"
+                android:background="?attr/custom_bn_background"
                 android:text="发送"
+                android:layout_marginLeft="20px"
                 android:layout_alignParentRight="true"/>
 
             <EditText
                 android:id="@+id/sms_edit_edit_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="150px"
                 android:layout_toLeftOf="@id/sms_edit_edit_send"
-                android:background="#1234"
+                android:background="?attr/custom_sms_edit_edit_background"
                 android:hint="短信"
-                android:textColorHint="#5234"/>
+                android:layout_centerVertical="true"
+                android:textColorHint="@color/hintTextColor"/>
 
-        </RelativeLayout>
+        </com.zhy.autolayout.AutoRelativeLayout>
 
         <ListView
             android:id="@+id/sms_edit_list_view"
             android:layout_above="@id/sms_edit_edit_layout"
+            android:divider="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </RelativeLayout>
+    </com.zhy.autolayout.AutoRelativeLayout>
 
 
-</FrameLayout>
+</com.zhy.autolayout.AutoFrameLayout>

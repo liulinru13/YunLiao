@@ -16,8 +16,12 @@
 
     <!--白天主题-->
     <style name="dayTheme" parent="AppTheme.NoActionBar">
-        <item name="custom_bn_background">@color/bn_background_day</item>
-        <item name="custom_bn_background_pressed">@color/bn_background_pressed_day</item>
+        <!-- 侧边栏-->
+        <item name="custom_nav_color">@drawable/side_nav_bar</item>
+        <!-- 按钮背景-->
+        <item name="custom_bn_background">@drawable/bn_round_corner_rectangle_day</item>
+        <!-- label 文字颜色-->
+        <item name="custom_label_text_color">@color/text_label_color_day</item>
         <!--list item-->
         <item name="custom_bn_sms_list_item_back_mark_background">@color/bn_sms_list_item_mark_background_day</item>
         <item name="custom_bn_sms_list_item_back_delete_background">@color/bn_sms_list_item_delete_background_day</item>
@@ -26,6 +30,7 @@
         <item name="custom_sms_list_item_1px_color">@color/sms_list_item_1px_color</item>
         <item name="custom_sms_list_item_select_bn_color">@color/sms_list_item_select_bn_color</item>
 
+        <item name="custom_sms_edit_edit_background">@drawable/border_sms_edit_day</item>
     </style>
     <!--夜间主题-->
     <style name="nightTheme" parent="AppTheme">

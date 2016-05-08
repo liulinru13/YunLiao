@@ -11,8 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mmrx.yunliao.R;
+import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThread;
 import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
 import com.mmrx.yunliao.model.bean.sms.SmsThread;
@@ -20,6 +22,7 @@ import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.presenter.FragmentPresenter;
 import com.mmrx.yunliao.presenter.util.BackupFileMaker;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+import com.mmrx.yunliao.presenter.util.SPUtil;
 import com.mmrx.yunliao.presenter.util.XmlWritter;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
@@ -28,6 +31,8 @@ import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
 
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 
 public class YunLiaoMainActivity extends AbsActivity
@@ -44,6 +49,12 @@ public class YunLiaoMainActivity extends AbsActivity
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
 
+    private View mLoginLayout;
+    private View mAccLayout;
+
+    private TextView mLoginBn;
+    private TextView mExitBn;
+    private TextView mAccTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +71,21 @@ public class YunLiaoMainActivity extends AbsActivity
         mDrawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
+        mAccLayout = navigationView.getHeaderView(0).findViewById(R.id.header_account_layout);
+        mLoginLayout = navigationView.getHeaderView(0).findViewById(R.id.header_login_layout);
+
+        mLoginBn = (TextView)mLoginLayout.findViewById(R.id.header_login_bn);
+        mExitBn = (TextView)mAccLayout.findViewById(R.id.header_exit_bn);
+        mAccTv = (TextView)mAccLayout.findViewById(R.id.account_tv);
+        mLoginBn.setOnClickListener(this);
+        mExitBn.setOnClickListener(this);
+
         //显示短信列表页面
         mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment);
-        mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag(),null);
+        mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag(), null);
+        signCheck();
     }
 
     @Override
@@ -73,6 +95,19 @@ public class YunLiaoMainActivity extends AbsActivity
         mListFragment = new SmsListFragment();
         mEditFragment = new SmsEditFragment();
         mBackUpFragment = new BackUpFragment();
+    }
+
+    private void signCheck(){
+        String acc = (String)SPUtil.get(this, Constant.SP_F_SETTING_CODE,Constant.SP_K_ACC,"");
+        //未登录
+        if(acc.equals("")){
+            mAccLayout.setVisibility(View.GONE);
+            mLoginLayout.setVisibility(View.VISIBLE);
+        }else{
+            mAccLayout.setVisibility(View.VISIBLE);
+            mLoginLayout.setVisibility(View.GONE);
+            mAccTv.setText(acc);
+        }
     }
 
     @Override
@@ -86,6 +121,18 @@ public class YunLiaoMainActivity extends AbsActivity
                 mPresenter.fragmentSelection_show_hide(mEditFragment.getFragmentTag(),null);
                 mFloatBn.setVisibility(View.GONE);
                 break;
+            //登录
+            case R.id.header_login_bn:
+                mDrawer.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent();
+                intent.setClass(this,LoginActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.header_exit_bn:
+                SPUtil.put(this, Constant.SP_F_SETTING_CODE,Constant.SP_K_ACC,"");
+                SPUtil.put(this, Constant.SP_F_SETTING_CODE,Constant.SP_K_PWD,"");
+                signCheck();
+                break;
             default:
                 break;
         }
@@ -95,7 +142,9 @@ public class YunLiaoMainActivity extends AbsActivity
     protected void onStart() {
         super.onStart();
         MiddlewareProxy.getInstance().checkDefaultSmsApp(this);
+        signCheck();
     }
+
 
     /**
      * 回退判断策略

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.bean.sms.SmsBean;
+import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -94,6 +95,7 @@ public class SmsEditAdapter extends BaseAdapter {
                 convertView.setTag(vh);
             }
         }
+        AutoUtils.autoSize(convertView);
         //填充状态
         if(bean.getLocked() == 1){
             vh.status.setVisibility(View.VISIBLE);

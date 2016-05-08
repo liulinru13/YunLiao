@@ -5,13 +5,16 @@
     <color name="colorAccent">#5c2680</color>
     
     <color name="transparent">#00ffffff</color>
+    <color name="hintTextColor">#5234</color>
 
-    <color name="bn_background_day">#9240d5</color>
-    <color name="bn_background_pressed_day">#a468d5</color>
+    <color name="bn_background_day">#d1c3de</color>
+    <color name="bn_background_pressed_day">#c0a1d9</color>
     <color name="bn_sms_list_item_mark_background_day">#9f9f9f</color>
     <color name="bn_sms_list_item_delete_background_day">#808080</color>
     <color name="bn_sms_list_item_back_text_day">#fff</color>
     <color name="sms_list_item_text_color">#202020</color>
     <color name="sms_list_item_1px_color">#643f046f</color>
     <color name="sms_list_item_select_bn_color">#c40303</color>
+
+    <color name="text_label_color_day">#707070</color>
 </resources>

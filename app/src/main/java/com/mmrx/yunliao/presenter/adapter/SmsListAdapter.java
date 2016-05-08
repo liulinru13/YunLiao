@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.bean.ISmsListBean;
 import com.mmrx.yunliao.presenter.util.L;
+import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class SmsListAdapter extends BaseAdapter{
         }else{
             vh = (ViewHolder)convertView.getTag();
         }
+        AutoUtils.autoSize(convertView);
         ISmsListBean bean = (ISmsListBean)getItem(position);
         vh.addr.setText(bean.getContacts());
         vh.content.setText(bean.getSnippet());

@@ -71,6 +71,8 @@ public class Constant {
     public static final String SP_K_SETTING_CODE = "sp_key_setting_code";//密码的key值
     public static final String SP_K_LOCATION = "sp_key_location_phone";//回执地址电话号
     public static final String SP_K_ENC = "sp_key_enc_value";//是否短信加密了
+    public static final String SP_K_ACC = "sp_key_acc_value";//账户
+    public static final String SP_K_PWD = "sp_key_pwd_value";//密码
 
     //设置页面的信息
     public static final String SP_SETTING_MAIN_NOTICE = "pref_notice";

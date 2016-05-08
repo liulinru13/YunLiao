@@ -1,35 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
+    android:background="?attr/custom_nav_color"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:orientation="vertical"
-    android:gravity="bottom">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@android:drawable/sym_def_app_icon"
-        android:id="@+id/imageView" />
-
-
-    <TextView
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/header_account_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Android Studio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="500px"
+            android:layout_height="90px"
+            android:textSize="50px"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:text="android.studio@android.com"
+            android:id="@+id/account_tv" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="android.studio@android.com"
-        android:id="@+id/textView" />
+        <TextView
+            android:id="@+id/header_exit_bn"
+            android:layout_width="wrap_content"
+            android:layout_height="90px"
+            android:gravity="center"
+            android:background="@drawable/bn_round_corner_rect_trans"
+            android:layout_toRightOf="@id/account_tv"
+            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:text=" 注   消 "/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/account_tv_above"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:text="欢 迎 您 !"
+            android:layout_above="@id/account_tv"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <ImageView
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/account_icon"
+            android:layout_above="@id/account_tv_above" />
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/header_login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/account_icon" />
+
+        <TextView
+            android:id="@+id/header_login_bn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bn_round_corner_rect_trans"
+            android:layout_toRightOf="@id/image2"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="100px"
+            android:text=" 登   录 "/>
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+
+</com.zhy.autolayout.AutoFrameLayout>
