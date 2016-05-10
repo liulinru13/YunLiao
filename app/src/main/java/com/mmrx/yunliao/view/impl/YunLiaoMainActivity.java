@@ -15,24 +15,15 @@ import android.widget.TextView;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.Constant;
-import com.mmrx.yunliao.model.bean.group.SmsGroupThread;
-import com.mmrx.yunliao.model.bean.group.SmsGroupThreadsBean;
-import com.mmrx.yunliao.model.bean.sms.SmsThread;
-import com.mmrx.yunliao.model.bean.sms.SmsThreadBean;
 import com.mmrx.yunliao.presenter.FragmentPresenter;
-import com.mmrx.yunliao.presenter.util.BackupFileMaker;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
 import com.mmrx.yunliao.presenter.util.SPUtil;
-import com.mmrx.yunliao.presenter.util.XmlWritter;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
+import com.mmrx.yunliao.view.fragment.AboutAppFragment;
 import com.mmrx.yunliao.view.fragment.BackUpFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
-
-import java.util.List;
-
-import butterknife.ButterKnife;
 
 
 public class YunLiaoMainActivity extends AbsActivity
@@ -43,6 +34,7 @@ public class YunLiaoMainActivity extends AbsActivity
     private SmsListFragment mListFragment;
     private SmsEditFragment mEditFragment;
     private BackUpFragment mBackUpFragment;
+    private AboutAppFragment mAboutAppFragment;
 
     private FragmentPresenter mPresenter;
     private FloatingActionButton mFloatBn;
@@ -83,7 +75,7 @@ public class YunLiaoMainActivity extends AbsActivity
         mExitBn.setOnClickListener(this);
 
         //显示短信列表页面
-        mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment);
+        mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment,mAboutAppFragment);
         mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag(), null);
         signCheck();
     }
@@ -95,6 +87,7 @@ public class YunLiaoMainActivity extends AbsActivity
         mListFragment = new SmsListFragment();
         mEditFragment = new SmsEditFragment();
         mBackUpFragment = new BackUpFragment();
+        mAboutAppFragment = new AboutAppFragment();
     }
 
     private void signCheck(){
@@ -193,21 +186,20 @@ public class YunLiaoMainActivity extends AbsActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        mDrawer.closeDrawer(GravityCompat.START);
         //备份
         if (id == R.id.nav_back_up) {
-            mDrawer.closeDrawer(GravityCompat.START);
+
             mPresenter.fragmentSelection_show_hide(mBackUpFragment.getFragmentTag(),null);
         }
         //设置
         else if (id == R.id.nav_setting) {
-            mDrawer.closeDrawer(GravityCompat.START);
             Intent intent = new Intent(this,SettingActivity.class);
             startActivity(intent);
         }
         //关于应用
         else if (id == R.id.nav_app) {
-
+            mPresenter.fragmentSelection_show_hide(mAboutAppFragment.getFragmentTag(),null);
         }
         //关于作者
         else if (id == R.id.nav_author) {

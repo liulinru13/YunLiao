@@ -12,7 +12,7 @@
 
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@id/image"
         android:layout_width="600px"
         android:layout_height="280px"
         android:layout_marginTop="100px"

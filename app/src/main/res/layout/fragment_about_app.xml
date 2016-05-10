@@ -1,0 +1,169 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="com.mmrx.yunliao.view.fragment.AboutAppFragment">
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
+        <ImageView
+            android:id="@id/image"
+            android:layout_width="600px"
+            android:layout_height="280px"
+            android:layout_marginTop="50px"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/yunliao_load_icon"/>
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:textSize="57px"
+            android:layout_marginTop="20px"
+            android:layout_marginBottom="20px"
+            android:gravity="center"
+            android:text="应用中参考借鉴了很多github开源控件,特此列出,以表感谢"/>
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text1"
+            android:text="daimajia -- AndroidViewAnimations"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text2"
+            android:text="bumptech -- glide"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text3"
+            android:text="jakewharton -- butterknife"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text4"
+            android:text="jenzz -- materialpreference"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text5"
+            android:text="afollestad -- material-dialogs"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text6"
+            android:text="frakbot -- jumpingbeans"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text7"
+            android:text="47deg -- android-swipelistview"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text8"
+            android:text="高德地图开放API"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text9"
+            android:text="Apache Camel -- XStream"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text10"
+            android:text="hongyangAndroid -- okhttputils"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text11"
+            android:text="hongyangAndroid -- autolayout"
+            android:textSize="50px"
+            android:layout_marginTop="20px"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/text13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text12"
+            android:layout_alignParentBottom="true"
+            android:text="https://github.com/liulinru13/YunLiao"
+            android:textSize="50px"
+            android:autoLink="web"
+            android:layout_marginTop="20px"
+            android:gravity="center"/>
+
+
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+</FrameLayout>
