@@ -54,8 +54,7 @@
             android:name=".view.impl.YunLiaoMainActivity"
             android:hardwareAccelerated="false"
             android:label="@string/title_activity_yun_liao_main"
-            android:launchMode="singleTask"
-            android:theme="@style/dayTheme" >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
@@ -70,12 +69,10 @@
         </activity>
         <activity
             android:name=".view.impl.SettingActivity"
-            android:label="@string/title_activity_setting"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/title_activity_setting">
         </activity>
 
-        <activity android:name=".view.impl.LoginActivity"
-            android:theme="@style/dayTheme">
+        <activity android:name=".view.impl.LoginActivity">
         </activity>
 
         <!-- 注册短信和彩信广播监听器以及短信后台服务 android4.4及其以上版本 需要 -->

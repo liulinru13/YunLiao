@@ -59,6 +59,7 @@
             android:padding="5dp"
             android:text="contentcontencontentcontensadfjadfadfadfadcontentcontensadfjadfadfadfadsadfjadfadfadfadfadf"
             android:background="#03de69"
+            android:textColor="#383838"
             android:layout_alignParentRight="true"/>
 
         <TextView

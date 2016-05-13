@@ -5,6 +5,7 @@ package com.mmrx.yunliao.presenter;/**
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.mmrx.yunliao.presenter.adapter.SmsEditAdapter;
 import com.mmrx.yunliao.presenter.smsSend.MessageUtils;
 import com.mmrx.yunliao.presenter.smsSend.WorkingMessage;
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+import com.mmrx.yunliao.presenter.util.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +41,12 @@ public class SmsEditPresenter implements IContentPresenter,
 
     private ListView mListView;
     private EditText mEditText;
+    private EditText mAddrText;
     private Button mSendBn;
     private List<SmsBean> mList;
 
     private SmsThread thread;
+    private WorkingMessage wm;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -66,12 +70,23 @@ public class SmsEditPresenter implements IContentPresenter,
         mListView = (ListView)mView.findViewById(R.id.sms_edit_list_view);
         mEditText = (EditText)mView.findViewById(R.id.sms_edit_edit_view);
         mSendBn = (Button)mView.findViewById(R.id.sms_edit_edit_send);
-
+        mAddrText = (EditText)mView.findViewById(R.id.sms_edit_addr_view);
+        wm = new WorkingMessage(mSmsEditFragment.getActivity());
         mSendBn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WorkingMessage wm = new WorkingMessage(mSmsEditFragment.getActivity());
-                wm.sendSmsWorker("hello",new String[]{"5554"}, MessageUtils.getOrCreateThreadId(mSmsEditFragment.getActivity(),"5554"));
+                String addr = mAddrText.getText().toString();
+                String msg = mEditText.getText().toString();
+                if(mAddrText.getVisibility() != View.VISIBLE){
+                    if(thread != null)
+                        addr = thread.getmThreasInfo().getAddresses();
+                    else
+                        addr = "";
+                }
+                if(check(addr,msg)) {
+                    wm.sendSmsWorker(msg, new String[]{addr}, MessageUtils.getOrCreateThreadId(mSmsEditFragment.getActivity(), addr));
+                }
+
             }
         });
 
@@ -80,6 +95,18 @@ public class SmsEditPresenter implements IContentPresenter,
         mAdapter = new SmsEditAdapter(mSmsEditFragment.getActivity(),mList);
 
         mListView.setAdapter(mAdapter);
+    }
+
+    private boolean check(String addr,String msg){
+        if(TextUtils.isEmpty(addr)){
+            MyToast.showLong(mSmsEditFragment.getActivity(),"请填写正确接收人地址");
+            return false;
+        }
+        if(TextUtils.isEmpty(msg)){
+            MyToast.showLong(mSmsEditFragment.getActivity(),"发送信息内容不能为空");
+            return false;
+        }
+        return true;
     }
 
     private void getData(SmsThread bean){
@@ -103,10 +130,14 @@ public class SmsEditPresenter implements IContentPresenter,
         mAdapter.notifyDataSetChanged();
         if(obj != null){
             if(obj instanceof SmsThread){
+                mAddrText.setVisibility(View.GONE);
                 thread = (SmsThread)obj;
                 mEditText.setText("");
                 getData(thread);
             }
+        }else{
+            thread = null;
+            mAddrText.setVisibility(View.VISIBLE);
         }
     }
 

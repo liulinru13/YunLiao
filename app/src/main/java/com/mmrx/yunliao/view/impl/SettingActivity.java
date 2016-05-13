@@ -1,11 +1,13 @@
 package com.mmrx.yunliao.view.impl;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.presenter.FragmentPresenter;
+import com.mmrx.yunliao.presenter.util.SPUtil;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
 import com.mmrx.yunliao.view.fragment.SettingFragment;
@@ -61,6 +63,7 @@ public class SettingActivity extends AbsActivity
         if(mPresenter.back())
             return;
 
+        SPUtil.put(this,"theme","reload",true);
         super.onBackPressed();
     }
 

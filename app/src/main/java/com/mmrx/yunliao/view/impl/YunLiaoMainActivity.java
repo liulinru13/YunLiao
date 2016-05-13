@@ -1,5 +1,6 @@
 package com.mmrx.yunliao.view.impl;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import com.mmrx.yunliao.presenter.util.SPUtil;
 import com.mmrx.yunliao.view.AbsActivity;
 import com.mmrx.yunliao.view.IFragmentListener;
 import com.mmrx.yunliao.view.fragment.AboutAppFragment;
+import com.mmrx.yunliao.view.fragment.AboutAuthorFragment;
 import com.mmrx.yunliao.view.fragment.BackUpFragment;
 import com.mmrx.yunliao.view.fragment.SmsEditFragment;
 import com.mmrx.yunliao.view.fragment.SmsListFragment;
@@ -35,6 +37,7 @@ public class YunLiaoMainActivity extends AbsActivity
     private SmsEditFragment mEditFragment;
     private BackUpFragment mBackUpFragment;
     private AboutAppFragment mAboutAppFragment;
+    private AboutAuthorFragment mAboutAuthFragment;
 
     private FragmentPresenter mPresenter;
     private FloatingActionButton mFloatBn;
@@ -74,8 +77,15 @@ public class YunLiaoMainActivity extends AbsActivity
         mLoginBn.setOnClickListener(this);
         mExitBn.setOnClickListener(this);
 
+        boolean reload = (boolean)SPUtil.get(this, "theme", "reload", false);
+        if(reload){
+            SPUtil.put(this, "theme", "reload", false);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            mPresenter.hideAllFragment(transaction);
+            transaction.commit();
+        }
         //显示短信列表页面
-        mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment,mAboutAppFragment);
+        mPresenter.putFragment(mListFragment, mEditFragment,mBackUpFragment,mAboutAppFragment,mAboutAuthFragment);
         mPresenter.fragmentSelection_show_hide(mListFragment.getFragmentTag(), null);
         signCheck();
     }
@@ -88,6 +98,7 @@ public class YunLiaoMainActivity extends AbsActivity
         mEditFragment = new SmsEditFragment();
         mBackUpFragment = new BackUpFragment();
         mAboutAppFragment = new AboutAppFragment();
+        mAboutAuthFragment = new AboutAuthorFragment();
     }
 
     private void signCheck(){
@@ -136,6 +147,11 @@ public class YunLiaoMainActivity extends AbsActivity
         super.onStart();
         MiddlewareProxy.getInstance().checkDefaultSmsApp(this);
         signCheck();
+        boolean reload = (boolean)SPUtil.get(this, "theme", "reload", false);
+        if(reload){
+//            SPUtil.put(this,"theme","reload",false);
+            recreate();
+        }
     }
 
 
@@ -203,7 +219,7 @@ public class YunLiaoMainActivity extends AbsActivity
         }
         //关于作者
         else if (id == R.id.nav_author) {
-
+            mPresenter.fragmentSelection_show_hide(mAboutAuthFragment.getFragmentTag(),null);
         }
 
 

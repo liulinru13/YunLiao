@@ -1,10 +1,155 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="?attr/custom_background"
     tools:context="com.mmrx.yunliao.view.fragment.BackUpFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/back_up_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/back_up_image1"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:src="@drawable/back_up"/>
+
+        <TextView
+            android:id="@+id/label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="备份"
+            android:textSize="60px"
+            android:layout_marginTop="100px"
+            android:layout_toRightOf="@id/back_up_image1"
+            android:gravity="center_vertical"
+            android:textColor="?attr/custom_label_text_color"
+            />
+
+        <TextView
+            android:id="@+id/back_up_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hintTextColor"
+            android:layout_marginLeft="20px"
+            android:layout_toRightOf="@id/label1"
+            android:textSize="45px"
+            android:layout_alignBaseline="@id/label1"
+            android:text="备份之前需要登录账户" />
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label1"
+            android:background="?attr/custom_border_backgound">
+
+            <TextView
+                android:id="@+id/back_up_constacts_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="将通讯录备份到服务器"
+                android:layout_marginTop="80px"
+                android:layout_marginBottom="40px"
+                android:textSize="55px"/>
+
+            <ImageView
+                android:id="@+id/image1"
+                android:layout_width="match_parent"
+                android:layout_below="@id/back_up_constacts_tv"
+                android:layout_height="1px"
+                android:background="?attr/custom_sms_list_item_1px_color"/>
+
+            <TextView
+                android:id="@+id/back_up_sms_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="将短信记录备份到服务器"
+                android:layout_below="@id/image1"
+                android:layout_marginTop="40px"
+                android:layout_marginBottom="80px"
+                android:textSize="55px"/>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/recover_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:layout_below="@id/back_up_layout">
+
+        <ImageView
+            android:id="@+id/back_up_image2"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:src="@drawable/recover"/>
+
+        <TextView
+            android:id="@+id/label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="还原"
+            android:textSize="60px"
+            android:layout_marginTop="100px"
+            android:layout_toRightOf="@id/back_up_image2"
+            android:gravity="center_vertical"
+            android:textColor="?attr/custom_label_text_color"
+            />
+
+        <TextView
+            android:id="@+id/recover_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hintTextColor"
+            android:layout_toRightOf="@id/label2"
+            android:layout_marginLeft="20px"
+            android:textSize="45px"
+            android:layout_alignBaseline="@id/label2"
+            android:text="还原之前需要登录账户" />
+
+        <com.zhy.autolayout.AutoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label2"
+            android:background="?attr/custom_border_backgound">
+
+            <TextView
+                android:id="@+id/recover_constacts_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="将通讯录备份到服务器"
+                android:layout_marginTop="80px"
+                android:layout_marginBottom="40px"
+                android:textSize="55px"/>
+
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_width="match_parent"
+                android:layout_below="@id/recover_constacts_tv"
+                android:layout_height="1px"
+                android:background="?attr/custom_sms_list_item_1px_color"/>
+
+            <TextView
+                android:id="@+id/recover_sms_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="将短信记录备份到服务器"
+                android:layout_below="@id/image2"
+                android:layout_marginTop="40px"
+                android:layout_marginBottom="80px"
+                android:textSize="55px"/>
+
+        </com.zhy.autolayout.AutoRelativeLayout>
+
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+</com.zhy.autolayout.AutoRelativeLayout>

@@ -9,6 +9,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
     <include
         layout="@layout/app_bar_yun_liao_main"
         android:layout_width="match_parent"
@@ -20,6 +21,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="?attr/custom_background"
+        app:itemTextColor="?attr/custom_textcolor"
+        app:itemIconTint="?attr/custom_textcolor"
         app:headerLayout="@layout/nav_header_yun_liao_main"
         app:menu="@menu/activity_yun_liao_main_drawer" />
 

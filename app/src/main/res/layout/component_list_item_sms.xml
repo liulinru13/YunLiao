@@ -5,7 +5,7 @@
     android:layout_height="300px"
     android:minHeight="300px"
     android:padding="25px"
-    android:background="#fff">
+    android:background="?attr/custom_bn_sms_list_item_background">
     <com.zhy.autolayout.AutoLinearLayout
         android:id="@+id/back"
         android:layout_width="100dp"
@@ -42,7 +42,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:background="?attr/custom_bn_sms_list_item_background">
 
         <!--<ImageView-->
             <!--android:id="@+id/sms_itme_unread_icon"-->

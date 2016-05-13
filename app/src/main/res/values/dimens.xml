@@ -8,8 +8,8 @@
     <dimen name="nav_header_height">160dp</dimen>
 
     <!--组件尺寸-->
-    <dimen name="shape_corner_radius">10dp</dimen>
-    <dimen name="shape_corner_padding">5dp</dimen>
+    <dimen name="shape_corner_radius">5dp</dimen>
+    <dimen name="shape_corner_padding">10dp</dimen>
 
     <!--sms list item
     <dimen name="sms_list_item_text_size">43px</dimen>

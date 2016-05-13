@@ -10,7 +10,7 @@
             android:switchTextOn="开"
             android:switchTextOff="关"
             android:defaultValue="true"
-            android:key="pref_contr_switch"/>
+            android:key="pref_contr_switch" />
         <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
             android:title="清空数据命令"
             android:summary="默认命令为 qk_隐私密码\n不填写内容为默认命令"

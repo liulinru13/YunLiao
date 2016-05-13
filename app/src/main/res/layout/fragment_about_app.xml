@@ -11,7 +11,7 @@
         android:paddingBottom="@dimen/activity_vertical_margin">
 
         <ImageView
-            android:id="@id/image"
+            android:id="@+id/image1"
             android:layout_width="600px"
             android:layout_height="280px"
             android:layout_marginTop="50px"
@@ -23,7 +23,7 @@
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/image"
+            android:layout_below="@id/image1"
             android:textSize="57px"
             android:layout_marginTop="20px"
             android:layout_marginBottom="20px"
@@ -159,7 +159,6 @@
             android:layout_alignParentBottom="true"
             android:text="https://github.com/liulinru13/YunLiao"
             android:textSize="50px"
-            android:autoLink="web"
             android:layout_marginTop="20px"
             android:gravity="center"/>
 

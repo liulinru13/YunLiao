@@ -8,11 +8,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="?attr/custom_background"
     tools:context="com.mmrx.yunliao.view.impl.LoginActivity">
 
 
     <ImageView
-        android:id="@id/image"
+        android:id="@+id/image1"
         android:layout_width="600px"
         android:layout_height="280px"
         android:layout_marginTop="100px"
@@ -25,16 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="650px"
         android:layout_marginTop="50px"
-        android:layout_below="@id/image"
+        android:layout_below="@id/image1"
         android:layout_centerHorizontal="true"
         android:padding="80px"
-        android:background="@drawable/border_sms_edit_day">
+        android:background="?attr/custom_border_backgound">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/hintTextColor"
+            android:textColor="?attr/custom_textcolorhint"
             android:text="账户密码由6-16位字符组成,仅且必须包含数字字母"
+            android:background="@color/transparent"
             android:layout_alignParentBottom="true" />
 
         <com.zhy.autolayout.AutoLinearLayout
@@ -42,6 +44,7 @@
             android:layout_marginBottom="10px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:orientation="horizontal">
 
             <TextView
@@ -49,6 +52,7 @@
                 android:layout_height="100px"
                 android:text="账号"
                 android:textSize="65px"
+                android:background="@color/transparent"
                 android:gravity="center_vertical"
                 android:layout_marginRight="20px"
                 android:textColor="?attr/custom_label_text_color"
@@ -61,7 +65,7 @@
                 android:textSize="55px"
                 android:hint="请输入账号"
                 android:maxLines="1"
-                android:textColorHint="@color/hintTextColor"
+                android:textColorHint="?attr/custom_textcolorhint"
                 android:background="@color/transparent"/>
 
 
@@ -82,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/login_acc_notice_tv"
+            android:background="@color/transparent"
             android:orientation="horizontal">
 
             <TextView
@@ -89,6 +94,7 @@
                 android:layout_height="100px"
                 android:text="密码"
                 android:textSize="65px"
+                android:background="@color/transparent"
                 android:gravity="center_vertical"
                 android:layout_marginRight="20px"
                 android:textColor="?attr/custom_label_text_color"/>
@@ -101,7 +107,7 @@
                 android:hint="请输入密码"
                 android:maxLines="1"
                 android:inputType="textPassword"
-                android:textColorHint="@color/hintTextColor"
+                android:textColorHint="?attr/custom_textcolorhint"
                 android:background="@color/transparent"/>
         </com.zhy.autolayout.AutoLinearLayout>
 

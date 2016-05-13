@@ -166,12 +166,13 @@ public class SettingFragment extends PreferenceFragment
             }
 
             mMain_notice.setOnPreferenceClickListener(this);
-            mMain_theme.setOnPreferenceClickListener(this);
+//            mMain_theme.setOnPreferenceClickListener(this);
             mMain_private.setOnPreferenceClickListener(this);
             mMain_control.setOnPreferenceClickListener(this);
 //            mMain_encode.setOnPreferenceClickListener(this);
 //            mMain_encode_show.setOnPreferenceClickListener(this);
             mMain_encode.setOnPreferenceChangeListener(this);
+            mMain_theme.setOnPreferenceChangeListener(this);
 
         }else if(tag.equals(Constant.SP_SETTING_MAIN_PRIVATE)) {
             //隐私设置
@@ -218,6 +219,9 @@ public class SettingFragment extends PreferenceFragment
         final String key = preference.getKey();
         L.i(TAG, key);
         switch (key){
+//            case Constant.SP_SETTING_MAIN_THEME:
+//
+//                break;
             case Constant.SP_SETTING_MAIN_NOTICE:
                 mListener.onFragmentChanged(Constant.SETTING,key);
                 break;
@@ -246,6 +250,9 @@ public class SettingFragment extends PreferenceFragment
         final String key = preference.getKey();
         L.i(TAG, key);
         switch (key){
+            case Constant.SP_SETTING_MAIN_THEME:
+                //1 true 白天 2 false夜晚
+                break;
             //加密存储
             case Constant.SP_SETTING_MAIN_ENCODE_SWITCH:
 

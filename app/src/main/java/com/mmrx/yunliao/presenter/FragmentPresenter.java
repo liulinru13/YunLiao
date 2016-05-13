@@ -136,14 +136,16 @@ public class FragmentPresenter implements IFragmentListener,IFragmentOnScreen{
      * 隐藏所有已经被add了的fragment
      * @param transaction
      */
-    private void hideAllFragment(FragmentTransaction transaction){
-        for(Map.Entry<String,Fragment> entry:this.mFragmentMap.entrySet()){
-            //该fragment已经被添加到页面上
-            if(hasFragmentByTag(entry.getKey())){
-                Fragment fragment = entry.getValue();
-                if(fragment instanceof IFragment)
-                    ((IFragment) fragment).onBackground(null);
-                transaction.hide(fragment);
+    public void hideAllFragment(FragmentTransaction transaction){
+        if(this.mFragmentMap != null) {
+            for (Map.Entry<String, Fragment> entry : this.mFragmentMap.entrySet()) {
+                //该fragment已经被添加到页面上
+                if (hasFragmentByTag(entry.getKey())) {
+                    Fragment fragment = entry.getValue();
+                    if (fragment instanceof IFragment)
+                        ((IFragment) fragment).onBackground(null);
+                    transaction.hide(fragment);
+                }
             }
         }
     }

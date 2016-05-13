@@ -11,6 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <EditText
+            android:id="@+id/sms_edit_addr_view"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="150px"
+            android:background="?attr/custom_sms_edit_edit_background"
+            android:hint="发送给"
+            android:visibility="gone"
+            android:textSize="40px"
+            android:textColorHint="?attr/custom_textcolorhint"/>
+
         <com.zhy.autolayout.AutoRelativeLayout
             android:id="@+id/sms_edit_edit_layout"
             android:layout_alignParentBottom="true"
@@ -43,8 +54,8 @@
                 android:background="?attr/custom_sms_edit_edit_background"
                 android:hint="短信"
                 android:layout_centerVertical="true"
-                android:textColorHint="@color/hintTextColor"/>
-
+                android:textSize="40px"
+                android:textColorHint="?attr/custom_textcolorhint"/>
         </com.zhy.autolayout.AutoRelativeLayout>
 
         <ListView

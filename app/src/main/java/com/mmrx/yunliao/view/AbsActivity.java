@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.mmrx.yunliao.R;
 import com.mmrx.yunliao.model.Constant;
 import com.mmrx.yunliao.presenter.util.SPUtil;
 
@@ -31,9 +32,12 @@ public abstract class AbsActivity extends AppCompatActivity {
      * 设置当前应用主题
      */
     private void setTheme(){
-        Integer themeResId = (Integer)SPUtil.get(this, Constant.SP_F_THEME,Constant.SP_K_THEME,Constant.SP_TYPE_INT);
-        if(themeResId != null){
-            setTheme(themeResId);
+//        Integer themeResId = (Integer)SPUtil.get(this, Constant.SP_F_THEME,Constant.SP_K_THEME,Constant.SP_TYPE_INT);
+        //白天
+        if((boolean)SPUtil.getPreference(this).getBoolean(Constant.SP_SETTING_MAIN_THEME,true)){
+            setTheme(R.style.dayTheme);
+        }else{
+            setTheme(R.style.nightTheme);
         }
     }
 
