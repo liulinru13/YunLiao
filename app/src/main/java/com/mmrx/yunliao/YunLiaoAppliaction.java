@@ -6,6 +6,11 @@ import android.app.Application;
 import android.content.res.Configuration;
 
 import com.mmrx.yunliao.presenter.util.MiddlewareProxy;
+import com.zhy.http.okhttp.OkHttpUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 /**
  * 创建人: mmrx
@@ -16,6 +21,15 @@ public class YunLiaoAppliaction extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        OkHttpClient okHttpClient;
+        okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                        //其他配置
+                .build();
+
+        OkHttpUtils.getInstance(okHttpClient);
     }
 
     @Override
