@@ -85,6 +85,7 @@ public class SmsEditPresenter implements IContentPresenter,
                 }
                 if(check(addr,msg)) {
                     wm.sendSmsWorker(msg, new String[]{addr}, MessageUtils.getOrCreateThreadId(mSmsEditFragment.getActivity(), addr));
+                    refreshView(thread);
                 }
 
             }

@@ -134,23 +134,28 @@ public class MiddlewareProxy implements IClean{
             final String myPackageName = context.getPackageName();
             final String smsPackageName = Telephony.Sms.getDefaultSmsPackage(context);
             if (!smsPackageName.equals(myPackageName)) {
-                createDialog(((Activity) context).getFragmentManager(), "dialog", "提示"
-                        , "当前应用非系统默认短信应用,正常使用需设置为系统默认短信应用,是否设置为默认短信应用?"
-                        , new CustomDialog.CustomDialogListener() {
-                    @Override
-                    public void doNegativeClick() {
-
-                    }
-
-                    @Override
-                    public void doPositiveClick() {
-                        Intent intent =
-                                new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
-                                myPackageName);
-                        context.startActivity(intent);
-                    }
-                });
+//                createDialog(((Activity) context).getFragmentManager(), "dialog", "提示"
+//                        , "当前应用非系统默认短信应用,正常使用需设置为系统默认短信应用,是否设置为默认短信应用?"
+//                        , new CustomDialog.CustomDialogListener() {
+//                    @Override
+//                    public void doNegativeClick() {
+//
+//                    }
+//
+//                    @Override
+//                    public void doPositiveClick() {
+//                        Intent intent =
+//                                new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+//                        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+//                                myPackageName);
+//                        context.startActivity(intent);
+//                    }
+//                });
+                Intent intent =
+                        new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                        myPackageName);
+                context.startActivity(intent);
             }
         }//end if
     }
