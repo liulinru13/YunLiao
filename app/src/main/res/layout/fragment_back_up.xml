@@ -126,7 +126,7 @@
                 android:id="@+id/recover_constacts_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="将通讯录备份到服务器"
+                android:text="将通讯录从服务器还原"
                 android:layout_marginTop="80px"
                 android:layout_marginBottom="40px"
                 android:textSize="55px"/>
@@ -142,7 +142,7 @@
                 android:id="@+id/recover_sms_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="将短信记录备份到服务器"
+                android:text="将短信记录从服务器还原"
                 android:layout_below="@id/image2"
                 android:layout_marginTop="40px"
                 android:layout_marginBottom="80px"

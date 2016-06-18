@@ -212,6 +212,7 @@ public class YunLiaoMainActivity extends AbsActivity
         else if (id == R.id.nav_setting) {
             Intent intent = new Intent(this,SettingActivity.class);
             startActivity(intent);
+            finish();
         }
         //关于应用
         else if (id == R.id.nav_app) {

@@ -63,7 +63,10 @@ public class SettingActivity extends AbsActivity
         if(mPresenter.back())
             return;
 
-        SPUtil.put(this,"theme","reload",true);
+//        SPUtil.put(this,"theme","reload",true);
+        Intent intent = new Intent();
+        intent.setClass(this,YunLiaoMainActivity.class);
+        startActivity(intent);
         super.onBackPressed();
     }
 
